@@ -1,0 +1,10 @@
+{
+    "require": {
+        "silex/silex": "1.0.*",
+        "symfony/form": "2.2.x-dev",
+        "twig/twig": "1.12.x-dev",
+        "doctrine/orm": "2.3.x-dev"
+
+    },
+    "minimum-stability": "dev"
+}
