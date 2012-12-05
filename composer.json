@@ -3,8 +3,28 @@
         "silex/silex": "1.0.*",
         "symfony/form": "2.2.x-dev",
         "twig/twig": "1.12.x-dev",
-        "doctrine/orm": "2.3.x-dev"
-
+        "doctrine/orm": "2.3.x-dev",
+        "minmb/phpmailer": "dev-master",
+        "JosephLenton/PHP-Error": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "JosephLenton/PHP-Error",
+                "version": "1.1.2",
+                "source": {
+                    "url": "https://github.com/JosephLenton/PHP-Error.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": {
+                    	"php_error\\ErrorHandler": "src/php_error.php"
+                    }
+                }
+            }
+        }
+    ]
 }
