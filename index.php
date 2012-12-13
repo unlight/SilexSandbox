@@ -1,9 +1,6 @@
 <?php
-$autoloader = require_once __DIR__.'/vendor/autoload.php';
-
-$autoloader->addClassMap(array('php_error\ErrorHandler' => __DIR__ . '/library/PHP-Error/src/php_error.php'));
-
-
+$Autoloader = require_once __DIR__.'/vendor/autoload.php';
+//$Autoloader->AddClassMap(array('php_error\ErrorHandler' => __DIR__ . '/library/PHP-Error/src/php_error.php'));
 
 $app = new Silex\Application();
 $app['debug'] = true; 
