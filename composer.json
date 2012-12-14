@@ -12,6 +12,12 @@
         "form-manager/form-manager": "dev-master",
         "JosephLenton/PHP-Error": "*"
     },
+    "autoload": {
+        "classmap": ["controllers/"],
+        "psr-0": {
+            "Art": "library"
+        }
+    },
     "minimum-stability": "dev",
     "repositories": [
         {

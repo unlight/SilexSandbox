@@ -1,15 +1,43 @@
 <?php
 namespace Art;
 
-use \Symfony\Component\HttpKernel\HttpKernelInterface;
-use \Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class View {
+class View extends EventDispatcher {
+	
 	private $app = null;
 	private $blocks = array();
+	private $assets = array();
 
 	public function __construct($app) {
 		$this->app = $app;
+	}
+
+	public function addJsFile($file) {
+
+	}
+
+	public function addCssFile($file) {
+
+	}
+
+	public function addAsset($asset, $name = 'content') {
+		$this->assets[$name][] = $asset;
+	}
+
+	private function renderAsset($name) {
+		$collection =& $this->assets[$name];
+		if ($collection) {
+			foreach ($collection as $asset) {
+				if (is_string($asset)) {
+					echo $asset;
+				} else {
+					throw new \Exception("Unknown type of asset.");
+				}
+			}
+		}
 	}
 
 	public function render($vars = array()) {
@@ -23,20 +51,21 @@ class View {
 		if (!isset($parts[2])) $parts[2] = 'index';
 		$methodName = $parts[2];
 
-		return $this->renderLayout('master.php', "$controllerName/$methodName.php", $vars);
+		return $this->renderLayout('default.master.php', "$controllerName/$methodName.php", $vars);
 	}
 
 	public function renderLayout($layout, $template, $vars = array()) {
 		$path = $this->app['path.root'] . '/views';
 		
 		// require_once ROOT . '/helpers.php';
-		foreach ($vars as $key => $value) { $$key = $value; }
+		extract($vars, EXTR_SKIP);
 		$app = $this->app;
+		
 		ob_start();
-
 		require $path . '/' . $template;
-
 		$content = ob_get_clean();
+
+		$this->addAsset($content, 'content');
 		
 		if ( null == $layout ) {
 			return $content;
