@@ -10,6 +10,8 @@ class View extends EventDispatcher {
 	private $app = null;
 	private $blocks = array();
 	private $assets = array();
+	private $view;
+	private $master;
 
 	public function __construct($app) {
 		$this->app = $app;
@@ -21,6 +23,14 @@ class View extends EventDispatcher {
 
 	public function addCssFile($file) {
 
+	}
+
+	private function getControllerName() {
+		return $this->app['body_identifier']->controllerName;
+	}
+
+	private function getMethodName() {
+		return $this->app['body_identifier']->methodName;	
 	}
 
 	public function addAsset($asset, $name = 'content') {
@@ -43,19 +53,17 @@ class View extends EventDispatcher {
 	public function render($vars = array()) {
 		if (count($vars) == 0) {
 			$vars = get_object_vars($this);
-			unset($vars['app'], $vars['blocks']);
+			unset($vars['app'], $vars['blocks'], $vars['assets']);
 		}
-		$request = $this->app['request'];
-		$parts = explode('/', $request->getPathInfo());
-		$controllerName = $parts[1];
-		if (!isset($parts[2])) $parts[2] = 'index';
-		$methodName = $parts[2];
 
-		return $this->renderLayout('default.master.php', "$controllerName/$methodName.php", $vars);
+		return $this->renderLayout(null, null, $vars);
 	}
 
 	public function renderLayout($layout, $template, $vars = array()) {
 		$path = $this->app['path.root'] . '/views';
+
+		if (!$layout) $layout = 'default.master.php';
+		if (!$template) $template = $this->getControllerName() . '/' . $this->getMethodName() . '.php';
 		
 		// require_once ROOT . '/helpers.php';
 		extract($vars, EXTR_SKIP);

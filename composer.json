@@ -2,6 +2,7 @@
     "require": {
         "silex/silex": "1.0.*",
         "symfony/form": "2.2.x-dev",
+        "symfony/validator": "2.2.*@dev",
         "twig/twig": "1.12.x-dev",
         "doctrine/orm": "2.3.x-dev",
         "minmb/phpmailer": "dev-master",
@@ -10,12 +11,14 @@
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
         "form-manager/form-manager": "dev-master",
-        "JosephLenton/PHP-Error": "*"
+        "JosephLenton/PHP-Error": "*",
+        "garetjax/phpbrowscap": "dev-master"
     },
     "autoload": {
         "classmap": ["controllers/"],
         "psr-0": {
-            "Art": "library"
+            "Art": "library", 
+            "Design": "library"
         }
     },
     "minimum-stability": "dev",

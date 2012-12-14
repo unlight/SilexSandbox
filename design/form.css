@@ -1,0 +1,191 @@
+/* Based on pea.rs */
+/* Horizontal form */
+fieldset {
+	border: 0;
+	margin: 0 0 10px 0;
+	padding: 0 0 10px 0;
+	border-bottom: 1px solid #eee;
+}
+
+fieldset label {
+	float: left;
+	width: 20%;
+	margin: 4px 0 5px 0;
+	font-weight: bold;
+}
+
+fieldset select {
+	min-width: 25%;
+	margin: 0;
+	padding: 3px;
+}
+
+fieldset input[type="radio"] {
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+fieldset.RadioList ul {
+	margin: 0 0 0 20%;
+	padding: 0;
+	list-style: none;
+}
+
+fieldset.RadioList ul li {
+	margin: 0 0 5px 0;
+}
+
+fieldset.RadioList ul li:last-child {
+	margin: 0;
+}
+
+fieldset.RadioList ul li label {
+	display: inline;
+	float: none;
+	width: auto;
+	font-weight: normal;
+}
+
+fieldset input[type="checkbox"] {
+	vertical-align: middle;
+	margin-right: 0.5em;
+}
+
+fieldset.CheckBox {
+	padding-left: 20%;	
+}
+
+fieldset.CheckBox label {
+	display: inline;
+	float: none;
+	width: auto;
+	font-weight: normal;
+}
+
+fieldset.Buttons {
+	margin: 0 0 0 20%;
+	padding: 0;
+	border: none;
+}
+
+.InputBox, textarea {
+	display: block;
+	width: 50%;
+	padding: 5px;
+	border: 1px solid #ddd;
+	background: #fafafa;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.InputBox:focus, textarea:focus {
+	border: 1px solid #ccc;
+	/*background: #ffe;*/
+	background: #fff;
+}
+
+fieldset textarea {
+	height: 150px;
+}
+
+fieldset p.Help {
+	margin: 5px 0 0 20%;
+	font-size: 90%;
+	color: #999;
+}
+
+.Button {
+	outline: none;
+	margin: 0;
+	padding: 5px 10px;
+	font-size: 90%;	
+	font-weight: bold;
+	border: 1px solid #aaa; /* #999 */
+	background: #eee; /*background: #f8f8f8;*/
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: inline-block;
+	cursor: pointer;
+	line-height: 1;
+	white-space: nowrap;
+	background-image: linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
+	background-image: -o-linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
+	background-image: -moz-linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
+	background-image: -webkit-linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
+	background-image: -ms-linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #CCCCCC), color-stop(1, #FAFAFA));
+	text-shadow: 0 1px 0 #fff;
+	box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
+	-moz-box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
+	-webkit-box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
+	transition: all 0.25s ease-in-out;
+	-webkit-transition: all 0.25s ease-in-out;
+	-moz-transition: all 0.25s ease-in-out;
+}
+
+.Button + .Button {
+	margin-left: 2px;
+}
+
+.Button:hover {
+	border-color: #666;
+/*	box-shadow: 0 0 8px lightblue;
+	-webkit-box-shadow: 0 0 8px lightblue;
+	-moz-box-shadow: 0 0 8px lightblue;*/
+}
+
+@media screen and (max-width: 600px) {
+	fieldset label {
+		display: block;
+		float: none;
+		width: auto;
+		margin: 0 0 5px 0;
+	}
+	fieldset.Buttons,
+	fieldset.CheckBox,
+	fieldset.RadioList ul,
+	fieldset p.Help {
+		margin-left: 0;
+		padding-left: 0;
+	}
+	fieldset input.InputBox,
+	fieldset textarea {
+		width: 100%;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+}
+
+/* Vertical form (top labels) */
+
+.VerticalForm fieldset {
+	padding-left: 2px;
+}
+
+.VerticalForm fieldset label {
+	display: block;
+	float: none;
+	width: auto;
+	margin: 0 0 5px 0;
+}
+
+.VerticalForm fieldset.Buttons,
+.VerticalForm fieldset.CheckBox,
+.VerticalForm fieldset.RadioList ul,
+.VerticalForm fieldset p.Help {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+fieldset label.Required:after {
+	color: red;
+	content: " *";
+	display: inline;
+	margin: 0 0.2em;
+}

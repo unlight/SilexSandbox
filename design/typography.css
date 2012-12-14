@@ -1,0 +1,71 @@
+body {
+	line-height: 1.3em;
+	font-size: 14px;
+	font-family: 'Lucida Grande', 'Segoe UI', sans-serif;
+	color: #000;
+	background: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+img {
+	max-width: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.Button {
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.Hidden {
+	display: none;
+}
+
+.Invisible {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.Deleted {
+	text-decoration: line-through;
+}
+
+.NoWrap {
+	white-space: nowrap;
+}
+
+.Center {
+	text-align: center;
+}
+
+.Right {
+	text-align: right;
+}
+
+p, .P {
+   margin: 1em 0;
+}
+
+div > p:first-child {
+	margin-top: 0;
+}
+
+div > p:last-child {
+	margin-bottom: 0;
+}
+
+h1, h2, h3 {
+	margin: 8px 0;
+}
+
+h4, h5, h6 {
+	margin: 5px 0;
+}

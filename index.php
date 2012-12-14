@@ -20,28 +20,31 @@ foreach ($configuration as $key => $value) {
 // Set error handler.
 $app->error(function(\Exception $e, $code) use ($app) {
 	if (!$app['debug']) return;
-	static $handler;
-	if ($handler === null) {
-		$handler = new php_error\ErrorHandler();
-		$handler->turnOn();
-	}
+	$handler = new php_error\ErrorHandler();
+	$handler->turnOn();
 	$handler->reportException($e);
 });
 
 // Services.
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-$app->register(new Silex\Provider\FormServiceProvider());
-$app->register(new Silex\Provider\ValidatorServiceProvider());
+// $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+// $app->register(new Silex\Provider\FormServiceProvider());
+// $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Twig.
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => 'views'
-));
+// $app->register(new Silex\Provider\TwigServiceProvider(), array(
+//     'twig.path' => 'views'
+// ));
 
 
 // View.
 $app['view'] = $app->share(function() use ($app) {
   return new Art\View($app);
+});
+
+
+// BodyIndentifier.
+$app['body_identifier'] = $app->share(function() use ($app) {
+	return new Design\BodyIndentifier($app);
 });
 
 // Routes.
