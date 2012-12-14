@@ -5,12 +5,12 @@
         "twig/twig": "1.12.x-dev",
         "doctrine/orm": "2.3.x-dev",
         "minmb/phpmailer": "dev-master",
-        "JosephLenton/PHP-Error": "dev-master",
         "gabordemooij/redbean": "dev-master",
         "vrana/notorm": "dev-master",
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
-        "form-manager/form-manager": "dev-master"
+        "form-manager/form-manager": "dev-master",
+        "JosephLenton/PHP-Error": "*"
     },
     "minimum-stability": "dev",
     "repositories": [
@@ -26,7 +26,7 @@
                 },
                 "autoload": {
                     "classmap": {
-                    	"php_error\\ErrorHandler": "src/php_error.php"
+                        "php_error\\ErrorHandler": "src/php_error.php"
                     }
                 }
             }

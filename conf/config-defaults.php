@@ -1,1 +1,2 @@
 <?php
+$configuration['debug'] = false;

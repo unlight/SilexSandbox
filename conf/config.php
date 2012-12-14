@@ -1,0 +1,2 @@
+<?php
+$configuration['debug'] = true;
