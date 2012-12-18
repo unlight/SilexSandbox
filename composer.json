@@ -10,7 +10,8 @@
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
         "form-manager/form-manager": "dev-master",
-        "JosephLenton/PHP-Error": "*"
+        "JosephLenton/PHP-Error": "*",
+        "mikecao/sparrow": "*"
     },
     "minimum-stability": "dev",
     "repositories": [
@@ -28,6 +29,20 @@
                     "classmap": {
                         "php_error\\ErrorHandler": "src/php_error.php"
                     }
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "mikecao/sparrow",
+                "version": "1.2011",
+                "source": {
+                    "url": "https://github.com/mikecao/sparrow.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": ["sparrow.php"]
                 }
             }
         }
