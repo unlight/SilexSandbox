@@ -37,8 +37,9 @@ $app->error(function(\Exception $e, $code) use ($app) {
 });
 
 // Services.
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-$app->register(new Silex\Provider\FormServiceProvider());
+// $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+// $app->register(new Silex\Provider\FormServiceProvider());
+// $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // View.
