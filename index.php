@@ -9,12 +9,23 @@ if (file_exists('conf/bootstrap.before.php')) {
 }
 
 // Loading configuration.
-require_once 'conf/config-defaults.php';
+$configuration = require 'conf/config-defaults.php';
 if (file_exists('conf/config.php')) {
-	require_once 'conf/config.php';
+	$configuration = array_merge($configuration, require 'conf/config.php');
 }
 foreach ($configuration as $key => $value) {
 	$app[$key] = $value;
+}
+
+// Include plugins.
+foreach ($app['enabled.plugins'] as $pluginName) {
+	$Path = 'plugins' . '/' . $pluginName;
+	$File = $Path . '/' . $pluginName . '.php';
+	if (!file_exists($File)) {
+		$File = $Path . '/default.php';
+	}
+	$IncludeResult = include_once($File);
+	$IncludeResult($app);
 }
 
 // Set error handler.
@@ -30,40 +41,22 @@ $app->error(function(\Exception $e, $code) use ($app) {
 // $app->register(new Silex\Provider\FormServiceProvider());
 // $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Twig.
+//Twig.
 // $app->register(new Silex\Provider\TwigServiceProvider(), array(
-//     'twig.path' => 'views'
+// 	'twig.path' => 'views'
 // ));
 
 
+$app->register(new Silex\Provider\SessionServiceProvider());
+
 // View.
 $app['view'] = $app->share(function() use ($app) {
-  return new Art\View($app);
-});
-
-
-// BodyIndentifier.
-$app['body_identifier'] = $app->share(function() use ($app) {
-	return new Design\BodyIndentifier($app);
+	return new Art\View($app);
 });
 
 // Routes.
 $app->mount('/', include 'controllers/root.php');
 $app->mount('/news', include 'controllers/news.php');
+$app->mount('/test', include 'controllers/test.php');
 
-// Test.
-$app->get('/hello/index/{name}', function($name) use($app) {
-	$request = $app['request'];
-	$view = $app['view'];
-	$name = $request->get('name');
-	$view->name = $name;
-	return $view->render();
-});
-
-// $app->get('/hello/{name}', function ($name) use ($app) {
-// 	return $app['twig']->render('hello.html', array(
-// 		'name' => $name,
-// 	));
-// });
-
-$app->run(); 
+$app->run();

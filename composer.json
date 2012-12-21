@@ -1,8 +1,7 @@
 {
     "require": {
         "silex/silex": "1.0.*",
-        "symfony/form": "2.2.x-dev",
-        "symfony/validator": "2.2.*@dev",
+        "JosephLenton/PHP-Error": "*",
         "twig/twig": "1.12.x-dev",
         "doctrine/orm": "2.3.x-dev",
         "minmb/phpmailer": "dev-master",
@@ -10,15 +9,17 @@
         "vrana/notorm": "dev-master",
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
+        "novuso/form": "dev-master",
         "form-manager/form-manager": "dev-master",
-        "JosephLenton/PHP-Error": "*",
-        "garetjax/phpbrowscap": "dev-master"
+        "symfony/form": "2.1.*@dev",
+        "symfony/templating": "2.2.*@dev"
     },
     "autoload": {
         "classmap": ["controllers/"],
         "psr-0": {
             "Art": "library", 
-            "Design": "library"
+            "Design": "library",
+            "Form": "library"
         }
     },
     "minimum-stability": "dev",

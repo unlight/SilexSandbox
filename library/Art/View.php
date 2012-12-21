@@ -26,11 +26,11 @@ class View extends EventDispatcher {
 	}
 
 	private function getControllerName() {
-		return $this->app['body_identifier']->controllerName;
+		return $this->app['request_info']->controller;
 	}
 
 	private function getMethodName() {
-		return $this->app['body_identifier']->methodName;	
+		return $this->app['request_info']->method;	
 	}
 
 	public function addAsset($asset, $name = 'content') {

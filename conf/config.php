@@ -1,2 +1,8 @@
 <?php
-$configuration['debug'] = true;
+return array(
+	'debug' => true,
+	'enabled.plugins' => array(
+		'RequestInfo',
+		'BodyIdentifier'
+	),
+);
