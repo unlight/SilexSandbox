@@ -2,25 +2,12 @@
     "require": {
         "silex/silex": "1.0.*",
         "JosephLenton/PHP-Error": "*",
-        "twig/twig": "1.12.x-dev",
-        "doctrine/orm": "2.3.x-dev",
         "minmb/phpmailer": "dev-master",
         "gabordemooij/redbean": "dev-master",
-        "vrana/notorm": "dev-master",
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
         "novuso/form": "dev-master",
-        "form-manager/form-manager": "dev-master",
-        "symfony/form": "2.1.*@dev",
-        "symfony/templating": "2.2.*@dev"
-    },
-    "autoload": {
-        "classmap": ["controllers/"],
-        "psr-0": {
-            "Art": "library", 
-            "Design": "library",
-            "Form": "library"
-        }
+        "mikecao/sparrow": "*"
     },
     "minimum-stability": "dev",
     "repositories": [
@@ -38,6 +25,20 @@
                     "classmap": {
                         "php_error\\ErrorHandler": "src/php_error.php"
                     }
+                }
+            }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "mikecao/sparrow",
+                "version": "1.2011",
+                "source": {
+                    "url": "https://github.com/mikecao/sparrow.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": ["sparrow.php"]
                 }
             }
         }

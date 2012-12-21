@@ -47,7 +47,6 @@ $app->error(function(\Exception $e, $code) use ($app) {
 // ));
 
 
-$app->register(new Silex\Provider\SessionServiceProvider());
 
 // View.
 $app['view'] = $app->share(function() use ($app) {
