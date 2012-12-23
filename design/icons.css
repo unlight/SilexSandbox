@@ -1,0 +1,115 @@
+[class~=Icon] {
+	font-weight: bold;
+}
+
+.IconHeart:before {
+	content: "\2764"
+}
+
+.IconPencil:before { /* LowerRightPencil */
+	content: "\270e"
+}
+
+.IconCrossmark:before {
+	content: "\274c"
+}
+
+.IconTickmark:before {
+	content: "\2713"
+}
+
+.IconFire:before {
+	content: "\1f525";
+}
+
+.IconBlackStar:before {
+	content: "\2605";
+}
+
+.IconSkullBones:before {
+	content: "\2620";
+}
+
+.IconBomb:before {
+	content: "\1f4a3";
+}
+
+.IconThumbsUp:before {
+	content: "\1f44d";
+}
+
+.IconThumbsDown:before {
+	content: "\1f44e";
+}
+
+.IconPill:before {
+	content: "\1f48a";
+}
+
+.IconMoneyBag:before {
+	content: "\1f4b0";
+}
+
+.IconClipboard:before {
+	content: "\1f4cb";
+}
+
+.IconOutboxTray:before {
+	content: "\1f4e4";
+}
+
+.IconInboxTray:before {
+	content: "\1f4e5";
+}
+
+.IconSpeechBalloon:before {
+	content: "\1f4ac";
+}
+
+.IconWrench:before {
+	content: "\1f527";
+}
+
+.IconWarning:before {
+	content: "\26A0";
+}
+
+.IconNoEntry:before {
+	content: "\26D4";
+}
+
+.IconCalendar:before {
+	content: "\1F4C5";
+}
+
+.IconInformationSource:before {
+	content: "\2139";
+}
+
+.IconBookmark:before {
+	content: "\1F516";
+}
+
+.IconLightBuld:before {
+	content: "\1F4A1";
+}
+
+.IconMan:before {
+	content: "\1F468";
+}
+
+.IconWoman:before {
+	content: "\1F469";
+}
+
+.IconGear:before {
+	content: "\2699";
+}
+
+.IconRecycle:before {
+	content: "\2672";
+}
+
+.IconBlackScissors:before {
+	content: "\2702";
+}

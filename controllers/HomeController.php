@@ -2,12 +2,15 @@
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomeController implements ControllerProviderInterface
 {
 	public function connect(Application $app) {
-		// creates a new controller based on the default route
+		// Creates a new controller based on the default route.
 		$controllers = $app['controllers_factory'];
+
+		$controllers->get('/welcome', $this->welcome());
 
 		$controllers->get('/', function(Application $app) {
 			$request = $app['request'];
@@ -15,5 +18,12 @@ class HomeController implements ControllerProviderInterface
 		});
 
 		return $controllers;
+	}
+
+	protected function welcome() {
+		return function(Application $app) {
+			$request = $app['request'];
+			return 'welcome:' . $request->getpathInfo();
+		};
 	}
 }

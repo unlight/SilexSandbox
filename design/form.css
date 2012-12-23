@@ -21,8 +21,8 @@ fieldset select {
 }
 
 fieldset input[type="radio"] {
-	vertical-align: text-bottom;
 	margin-right: 0.5em;
+	vertical-align: -10%;
 }
 
 fieldset.RadioList ul {
@@ -47,7 +47,7 @@ fieldset.RadioList ul li label {
 }
 
 fieldset input[type="checkbox"] {
-	vertical-align: middle;
+	vertical-align: -10%;
 	margin-right: 0.5em;
 }
 
@@ -100,18 +100,18 @@ fieldset p.Help {
 
 .Button {
 	outline: none;
-	margin: 0;
-	padding: 5px 10px;
-	font-size: 90%;	
-	font-weight: bold;
-	border: 1px solid #aaa; /* #999 */
-	background: #eee; /*background: #f8f8f8;*/
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
 	display: inline-block;
 	cursor: pointer;
+	margin: 0;
+	font-size: 95%;
 	line-height: 1;
+	font-weight: bold;
+	padding: 4px 6px;
+	background: #f8f8f8;
+	border: 1px solid #999;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	white-space: nowrap;
 	background-image: linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
 	background-image: -o-linear-gradient(bottom, #CCCCCC 0%, #FAFAFA 100%);
@@ -123,9 +123,8 @@ fieldset p.Help {
 	box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
 	-moz-box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
 	-webkit-box-shadow: inset 0 1px 0 #fff, inset 0 -1px 2px #bbb;
-	transition: all 0.25s ease-in-out;
-	-webkit-transition: all 0.25s ease-in-out;
-	-moz-transition: all 0.25s ease-in-out;
+	border-color: #999;
+	color: #333;
 }
 
 .Button + .Button {
@@ -133,10 +132,38 @@ fieldset p.Help {
 }
 
 .Button:hover {
+	color: #111;
 	border-color: #666;
 /*	box-shadow: 0 0 8px lightblue;
 	-webkit-box-shadow: 0 0 8px lightblue;
 	-moz-box-shadow: 0 0 8px lightblue;*/
+}
+
+.Button.FileInput > input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	border: solid transparent;
+	border-width: 0 0 100px 200px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+	direction: ltr;
+	cursor: pointer;
+	-webkit-transform: translate(-300px, 0) scale(4);
+	-moz-transform: translate(-300px, 0) scale(4);
+	-ms-transform: translate(-300px, 0) scale(4);
+	-o-transform: translate(-300px, 0) scale(4);
+	transform: translate(-300px, 0) scale(4);
+}
+
+.Button.FileInput {
+	position: relative;
+	overflow: hidden;
+	vertical-align: -50%;
 }
 
 @media screen and (max-width: 600px) {

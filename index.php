@@ -17,17 +17,6 @@ foreach ($configuration as $key => $value) {
 	$app[$key] = $value;
 }
 
-// Include plugins.
-foreach ($app['enabled.plugins'] as $pluginName) {
-	$Path = 'plugins' . '/' . $pluginName;
-	$File = $Path . '/' . $pluginName . '.php';
-	if (!file_exists($File)) {
-		$File = $Path . '/default.php';
-	}
-	$IncludeResult = include_once($File);
-	$IncludeResult($app);
-}
-
 // Set error handler.
 $app->error(function(\Exception $e, $code) use ($app) {
 	if (!$app['debug']) return;
@@ -36,26 +25,26 @@ $app->error(function(\Exception $e, $code) use ($app) {
 	$handler->reportException($e);
 });
 
-// Services.
-// $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-// $app->register(new Silex\Provider\FormServiceProvider());
-// $app->register(new Silex\Provider\ValidatorServiceProvider());
+// Include plugins.
+foreach ($app['enabled.plugins'] as $pluginName) {
+	$pluginFile = "plugins/{$pluginName}/{$pluginName}.php";
+	$plugin = include $pluginFile;
+	$plugin($app);
+}
 
-//Twig.
-// $app->register(new Silex\Provider\TwigServiceProvider(), array(
-// 	'twig.path' => 'views'
-// ));
-
-
-
-// View.
-$app['view'] = $app->share(function() use ($app) {
-	return new Art\View($app);
-});
-
-// Routes.
-$app->mount('/', include 'controllers/root.php');
-$app->mount('/news', include 'controllers/news.php');
-$app->mount('/test', include 'controllers/test.php');
+// Do not include unnecessary controllers.
+$request = isset($_GET['p']) ? $_GET['p'] : '';
+$parts = array_filter(explode('/', $request));
+if (count($parts) > 0) {
+	$controllerPath = $parts[0];
+	$controllerFile = "controllers/{$controllerPath}.php";
+	if (file_exists($controllerFile)) {
+		$app->mount($controllerPath, require $controllerFile);	
+	}
+	// require_once __DIR__ . '/controllers/HomeController.php';
+	// $app->mount('/home', new HomeController());
+} else {
+	$app->mount('/', include 'controllers/root.php');	
+}
 
 $app->run();

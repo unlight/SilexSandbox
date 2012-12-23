@@ -3,12 +3,12 @@
 <head>
 	<?php $this->renderAsset('head') ?>
 </head>
-<body id="<?php echo $app['body_identifier'] ?>" class="<?php echo trim('Application'); ?>">
-	<?php $this->dispatch('before_body'); ?>
+<body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['view.body.class'] ?>">
+	<?php $this->dispatch('before.body'); ?>
 	<div id="Frame">
 	<div class="Head" id="Head">
 		<div class="Row">
-			<strong class="SiteTitle">
+			<strong class="SiteTitle"></strong>
 			 <span class="Logo">&#0160;
 			 </span>
 				<?php 
@@ -44,6 +44,6 @@
 	</div>
 
 </div>
-<?php $this->dispatch('after_body'); ?>
+<?php $this->dispatch('after.body'); ?>
 </body>
 </html>

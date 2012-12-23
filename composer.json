@@ -6,8 +6,10 @@
         "gabordemooij/redbean": "dev-master",
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
-        "novuso/form": "dev-master",
-        "mikecao/sparrow": "*"
+        "mikecao/sparrow": "*",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
     },
     "minimum-stability": "dev",
     "repositories": [
