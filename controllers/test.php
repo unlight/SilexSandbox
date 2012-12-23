@@ -33,6 +33,15 @@ $controller->match('redbean/model', function(Application $app) {
     R::trash($bandmember);
 });
 
+$controller->match('redbean/updateschema', function(Application $app) {
+	$comment = R::dispense('comment');
+	$comment->type = 'page';
+	$comment->id = -2;
+	$comment->body = str_repeat('*', pow(2, 16));
+	$comment->score = 99.99;
+	R::store($comment);
+});
+
 $controller->match('redbean/user', function(Application $app) {
 	$user = R::dispense('user');
 	$user->name = 'Joe';
