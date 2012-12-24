@@ -7,9 +7,15 @@ class SqlBuilder extends Sparrow {
 
 	public static function create() {
 		if (is_null(self::$instance)) {
-			self::$instance = new static();
+			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	public function reset() {
+		parent::reset();
+		$this->selects = array();
+		return $this;
 	}
 
 	public function addselect($fields) {
