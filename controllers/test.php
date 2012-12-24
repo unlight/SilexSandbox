@@ -8,13 +8,40 @@ $controller->match('/', function (Application $app) {
 	return 'Test Index.';
 });
 
+$controller->match('sparrow/2', function(Application $app) {
+	$sql = SqlBuilder::create()
+		->from('user u')
+		->where('u.name', "joe'x")
+		->addselect('u.name as user_name')
+		->addselect('u.email as user_email')
+		->select()
+		->sql(); // last
+	d($sql);
+});
+
+$controller->match('sparrow/1', function(Application $app) {
+	// https://github.com/mikecao/sparrow
+	$Sparrow = new Sparrow();
+	$Sql1 = $Sparrow
+		->From('user u')
+		->Where('u.name', "joe'x")
+		->Select('u.name as user_name') // Pre last.
+		->Sql(); // last
+	$Sql2 = $Sparrow
+		->From('user')
+		->join('role', array('role.id' => 'user.id'))
+		->Select()
+		->Sql();
+	d($Sql1, $Sql2, R::getAll($Sql1));
+});
+
 $controller->match('redbean/tag', function(Application $app) {
 	$book = R::dispense('book');
 	$book->title = 'Gifted Programmers';
     $book->author = 'Charles Xavier';
     $book->price = rand();
     $book->IsDeleted = true;
-    $book->id = -1;
+    // $book->id = -1;
     $id = R::store($book);
     // $tag = R::tag($book, array('topsecret', 'mi6'));
     // R::addTags( $book, array('funny','hilarious') );
