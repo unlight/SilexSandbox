@@ -7,6 +7,8 @@
         "pagerfanta/pagerfanta": "dev-master",
         "soup/paginator": "dev-master",
         "mikecao/sparrow": "*",
+        "hybridauth/hybridauth": "dev-master",
+        "hautelook/phpass": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

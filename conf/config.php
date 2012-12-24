@@ -11,5 +11,6 @@ return array(
 		'RequestInfo',
 		'RedBean',
 		'ViewBodyClass',
+		'SqlBuilder'
 	),
 );
