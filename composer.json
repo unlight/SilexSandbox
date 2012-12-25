@@ -11,7 +11,8 @@
         "hautelook/phpass": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "fabpot/goutte": "1.0.*@dev"
     },
     "minimum-stability": "dev",
     "repositories": [
