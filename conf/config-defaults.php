@@ -1,11 +1,21 @@
 <?php
 return array(
 	'debug' => false,
-	'database.engine' => 'mysql',
-	'database.host' => 'localhost',
-	'database.name' => 'dbname',
-	'database.user' => 'dbuser',
-	'database.password' => '',
-	'enabled.plugins' => array(),
-	'application.title' => 'Silex'
+	'database' => array(
+		'engine' => 'mysql',
+		'host' => 'localhost',
+		'name' => 'dbname',
+		'user' => 'dbuser',
+		'password' => '',
+	),
+	'application' => array(
+		'title' => 'Silex',
+		'cookie' => array(
+			'salt' => '',
+			'name' => 'silex',
+			'path' => '/',
+			'domain' => ''
+		)
+	),
+	'enabledplugins' => array(),
 );

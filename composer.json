@@ -8,7 +8,13 @@
         "soup/paginator": "dev-master",
         "mikecao/sparrow": "*",
         "hybridauth/hybridauth": "dev-master",
-        "hautelook/phpass": "dev-master"
+        "opauth/twitter": "dev-master",
+        "opauth/facebook": "dev-master",
+        "opauth/google": "dev-master",
+        "hautelook/phpass": "dev-master",
+        "erivello/facebook-service-provider": "dev-master",
+        "session-handler-cookie/session-handler-cookie": "dev-master",
+        "insolis/facebook-service-provider": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*",

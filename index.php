@@ -8,11 +8,21 @@ if (file_exists('conf/bootstrap.before.php')) {
 	require_once 'conf/bootstrap.before.php';
 }
 
+function MergeArrays($Arr1, $Arr2) {
+  foreach($Arr2 as $key => $Value) {
+    if(array_key_exists($key, $Arr1) && is_array($Value))
+      $Arr1[$key] = MergeArrays($Arr1[$key], $Arr2[$key]);
+    else $Arr1[$key] = $Value;
+  }
+  return $Arr1;
+}
+
 // Loading configuration.
 $configuration = require 'conf/config-defaults.php';
 if (file_exists('conf/config.php')) {
-	$configuration = array_merge($configuration, require 'conf/config.php');
+	$configuration = MergeArrays($configuration, require 'conf/config.php');
 }
+
 foreach ($configuration as $key => $value) {
 	$app[$key] = $value;
 }
@@ -26,10 +36,11 @@ $app->error(function(\Exception $e, $code) use ($app) {
 });
 
 // Include plugins.
-foreach ($app['enabled.plugins'] as $pluginName) {
+foreach ($app['enabledplugins'] as $pluginName => $enabled) {
+	if ($enabled !== true) continue;
 	$pluginFile = "plugins/{$pluginName}/{$pluginName}.php";
 	$plugin = include $pluginFile;
-	$plugin($app);
+	if (is_callable($plugin)) $plugin($app);
 }
 
 // Do not include unnecessary controllers.
@@ -39,7 +50,12 @@ if (count($parts) > 0) {
 	$controllerPath = $parts[0];
 	$controllerFile = "controllers/{$controllerPath}.php";
 	if (file_exists($controllerFile)) {
-		$app->mount($controllerPath, require $controllerFile);	
+		$module = require $controllerFile;
+		if ($module == 1) {
+			$class = ucfirst($controllerPath) . 'Controller';
+			$module = new $class;
+		}
+		$app->mount($controllerPath, $module);
 	}
 	// require_once __DIR__ . '/controllers/HomeController.php';
 	// $app->mount('/home', new HomeController());
