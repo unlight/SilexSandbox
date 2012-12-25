@@ -17,7 +17,6 @@ return array(
 		)
 	),
 	'enabledplugins' => array(
-		'Controller' => true, 
 		'GdnCore' => true, 
 		'GdnForm' => true, 
 		'GdnView' => true, 

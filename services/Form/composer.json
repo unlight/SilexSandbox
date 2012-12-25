@@ -1,0 +1,12 @@
+{
+    "name": "iamthes/database-service",
+    "description": "Database service provider for Silex.",
+    "require": {
+        "silex/silex": "1.*"
+    },
+    "autoload": {
+    	"classmap": [
+    		""
+    	]
+    }
+}

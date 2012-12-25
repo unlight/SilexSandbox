@@ -12,7 +12,6 @@ class HomeController extends Controller
 	}
 
 	public function welcome(Application $app) {
-		echo $x;
 		$request = $app['request'];
 		return 'welcome:' . $request->getpathInfo();
 	}

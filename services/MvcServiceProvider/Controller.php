@@ -3,8 +3,8 @@
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 
-abstract class Controller implements ControllerProviderInterface
-{
+abstract class Controller implements ControllerProviderInterface {
+	
 	protected $app;
 
 	public function connect(Application $app) {

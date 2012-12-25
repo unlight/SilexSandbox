@@ -65,6 +65,22 @@ class ConfigurationServiceProvider implements ServiceProviderInterface {
 		foreach ($configuration as $key => $value) {
 			$app[$key] = $value;
 		}
+
+
+		$app['config'] = function($name, $default) use ($app) {
+			$result = $default;
+			if (isset(self::$app[$name])) {
+				$result = self::$app[$name];
+			} else {
+
+			}
+			return $result;
+		};
+
+		// Config::app($app);
+		// $v = Config::{'debug'}();
+		// $v = Config::$debug;
+		// d($v);
 	}
 
 	/**

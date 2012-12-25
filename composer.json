@@ -13,14 +13,18 @@
         "opauth/google": "dev-master",
         "hautelook/phpass": "dev-master",
         "erivello/facebook-service-provider": "dev-master",
-        "session-handler-cookie/session-handler-cookie": "dev-master",
-        "insolis/facebook-service-provider": "dev-master"
+        "session-handler-cookie/session-handler-cookie": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
         "fabpot/goutte": "1.0.*@dev"
     },
     "minimum-stability": "dev",
+    "autoload": {
+        "classmap": [
+            "services"
+        ]
+    },
     "repositories": [
         {
             "type": "package",
