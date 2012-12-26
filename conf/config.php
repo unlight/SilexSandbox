@@ -18,7 +18,6 @@ return array(
 	),
 	'enabledplugins' => array(
 		'BodyIdentifier' => true, 
-		'RequestInfo' => true, 
 		'RedBean' => true, 
 		'ViewBodyClass' => true, 
 		'SqlBuilder' => true,
