@@ -66,7 +66,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$slashPos = strpos($path, '/');
 		if ($slashPos === false) return;
 		$name = substr($path, 0, $slashPos);
-		if (!$name) {
+		if ($name) {
 			$controllerFile = $this->controllers . '/' . $name. '.php';
 			if (file_exists($controllerFile)) {
 				$module = require $controllerFile;

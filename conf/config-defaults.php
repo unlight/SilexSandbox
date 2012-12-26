@@ -16,7 +16,7 @@ return array(
 			'path' => '/',
 			'domain' => ''
 		),
-		'session' = array(
+		'session' => array(
 			'length' => '15 minutes'
 		),
 		'forms' => array(

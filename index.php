@@ -20,6 +20,7 @@ $app->error(function(\Exception $e, $code) use ($app) {
 $app->register(new ConfigurationServiceProvider('conf'));
 $app->register(new MvcServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
+$app->register(new FormServiceProvider());
 
 // Run application.
 $app->run();
