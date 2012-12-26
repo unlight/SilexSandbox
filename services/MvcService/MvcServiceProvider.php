@@ -47,7 +47,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 			}
 		}
 
-		$this->registerDefaultController();
+		// $this->registerDefaultController();
 		$this->registerControllers();
 	}
 
