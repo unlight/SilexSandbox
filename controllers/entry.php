@@ -9,7 +9,7 @@ class EntryController extends Controller {
 	
 	public function register(Application $app) {
 		$view = $app['view'];
-		$view->form = new Gdn_Form();
+		$view->form = new Form();
 		return $view->render();
 	}
 }

@@ -1,0 +1,12 @@
+{
+    "name": "iamthes/mvc-service-provider",
+    "description": "MVC service provider for Silex.",
+    "require": {
+        "silex/silex": "1.*"
+    },
+    "autoload": {
+    	"classmap": [
+    		""
+    	]
+    }
+}
