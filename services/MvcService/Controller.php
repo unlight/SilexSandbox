@@ -22,8 +22,9 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		$self =& $this;
 		$controller = $app['controllers'];
 		// TODO: Do it by Reflection
+		// TODO: Extract require params...
 		foreach (get_class_methods($self) as $method) {
-			$controller->get("/{$method}", function() use ($app, $self, $method) {
+			$controller->match($method, function() use ($app, $self, $method) {
 				$self->initialize();
 				return $self->$method($app);
 			});

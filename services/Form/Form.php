@@ -106,14 +106,22 @@ class Form {
 	 *
 	 * @param string $tableName
 	 */
-	public function __construct($tableName = '') {
+	public function construct($tableName = '') {
 		if ($tableName != '') {
 			$tableModel = new Gdn_Model($tableName);
 			$this->SetModel($tableModel);
 		}
 		
 		// Get custom error class
-		$this->errorClass = self::C('Garden.Forms.InlineErrorClass', 'Error');
+		$this->errorClass = $this->C('Garden.Forms.InlineErrorClass', 'Error');
+	}
+
+
+	/**
+	 * [__construct description]
+	 */
+	public function __construct($app) {
+		$this->app = $app;
 	}
 
 	/**
@@ -123,23 +131,11 @@ class Form {
 	protected $app;
 
 	/**
-	 * [application description]
-	 * @param  [type] $app [description]
-	 * @return [type]      [description]
-	 */
-	public function application($app = null) {
-		if ($app !== null) {
-			$this->app = $app;
-		}
-		return $this->app;
-	}
-
-	/**
 	 * [C description]
 	 * @param [type]  $name    [description]
 	 * @param boolean $default [description]
 	 */
-	protected static function C($name, $default = false) {
+	protected function C($name, $default = false) {
 		return $this->app['config']($name, $default);
 	}
 
@@ -148,8 +144,8 @@ class Form {
 	 * Gdn_Format::Form()
 	 * @param mixed $Mixed
 	 */
-	protected static function FormatForm($Mixed) {
-		$charset = self::C('charset', 'utf-8');
+	protected function FormatForm($Mixed) {
+		$charset = $this->C('charset', 'utf-8');
 		return htmlspecialchars($Mixed, ENT_QUOTES, $charset);
 	}
 	
@@ -186,7 +182,7 @@ class Form {
 	
 	public function BodyBox($column = 'Body', $attributes = array()) {
 		TouchValue('MultiLine', $attributes, TRUE);
-		TouchValue('format', $attributes, $this->GetValue('Format', self::C('Garden.InputFormatter')));
+		TouchValue('format', $attributes, $this->GetValue('Format', $this->C('Garden.InputFormatter')));
 		TouchValue('Wrap', $attributes, TRUE);
 		
 		$this->SetValue('Format', $attributes['format']);
@@ -321,7 +317,7 @@ class Form {
 			$return .= '<option value=""></option>';
 			
 		// Show root categories as headings (ie. you can't post in them)?
-		$doHeadings = self::C('Vanilla.Categories.DoHeadings');
+		$doHeadings = $this->C('Vanilla.Categories.DoHeadings');
 		
 		// If making headings disabled and there was no default value for
 		// selection, make sure to select the first non-disabled value, or the
@@ -1298,8 +1294,8 @@ class Form {
 				foreach ($query as $key => $value) {
 					if (in_array($key, $exclude))
 						continue;
-					$key = self::FormatForm($key);
-					$value = self::FormatForm($value);
+					$key = $this->FormatForm($key);
+					$value = $this->FormatForm($value);
 					$hiddens .= "\n<input type=\"hidden\" name=\"$key\" value=\"$value\" />";
 				}
 			}
@@ -1319,7 +1315,7 @@ class Form {
 			$return .= $this->Hidden('TransientKey',
 				array('value' => $session->TransientKey()));
 			// Also add a honeypot if Forms.HoneypotName has been defined
-			$honeypotName = self::C('application.forms.honeypotname');
+			$honeypotName = $this->C('application.forms.honeypotname');
 			if ($honeypotName) $return .= $this->Hidden($honeypotName,
 				array('Name' => $honeypotName, 'style' => "display: none;"));
 		}
@@ -2249,6 +2245,6 @@ class Form {
 	 */
 	protected function _ValueAttribute($fieldName, $attributes) {
 		// Value from $attributes overrides the datasource and the postback.
-		return ' value="' . self::FormatForm(ArrayValueI('value', $attributes, $this->GetValue($fieldName))) . '"';
+		return ' value="' . $this->FormatForm(ArrayValueI('value', $attributes, $this->GetValue($fieldName))) . '"';
 	}
 }

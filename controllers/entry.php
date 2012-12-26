@@ -4,12 +4,12 @@ use Silex\Application;
 class EntryController extends Controller {
 
 	public function initialize() {
-		$this->app['view']->addCssFile('style.css');
+		$this->addCssFile('style.css');
 	}
 	
 	public function register(Application $app) {
-		$view = $app['view'];
-		$view->form = new Form();
-		return $view->render();
+		d($_SERVER);
+		$form = $app['form'];
+		return $this->render();
 	}
 }
