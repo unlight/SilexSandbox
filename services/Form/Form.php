@@ -1319,8 +1319,7 @@ class Form {
 			$return .= $this->Hidden('TransientKey',
 				array('value' => $session->TransientKey()));
 			// Also add a honeypot if Forms.HoneypotName has been defined
-			$honeypotName = Gdn::Config(
-				'Garden.Forms.HoneypotName');
+			$honeypotName = self::C('application.forms.honeypotname');
 			if ($honeypotName) $return .= $this->Hidden($honeypotName,
 				array('Name' => $honeypotName, 'style' => "display: none;"));
 		}
