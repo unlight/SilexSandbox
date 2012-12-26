@@ -13,7 +13,8 @@
         "opauth/google": "dev-master",
         "hautelook/phpass": "dev-master",
         "erivello/facebook-service-provider": "dev-master",
-        "session-handler-cookie/session-handler-cookie": "dev-master"
+        "session-handler-cookie/session-handler-cookie": "dev-master",
+        "iamthes/useful-functions": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*",

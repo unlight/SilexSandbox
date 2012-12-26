@@ -1,23 +1,39 @@
 <?php
 
+use Silex\Application;
+use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class GdnView extends EventDispatcher {
+abstract class Controller extends EventDispatcher implements ControllerProviderInterface {
 	
-	private $app;
-	private $assets = array();
-	private $view = '';
-	private $masterView = '';
+	protected $app;
+	protected $assets = array();
+	protected $view = '';
+	protected $masterView = '';
 	public $data = array();
 	protected $cssFiles = array();
 	protected $jsFiles = array();
 	public $head;
 
-	public function __construct($app) {
+	public function connect(Application $app) {
 		$this->app = $app;
+		$self =& $this;
+		$controller = $app['controllers'];
+		// TODO: Do it by Reflection
+		foreach (get_class_methods($self) as $method) {
+			$controller->get("/{$method}", function() use ($app, $self, $method) {
+				$self->initialize();
+				return $self->$method($app);
+			});
+		}
+		return $controller;
 	}
+
+	public function initialize() {
+	}
+
 
 	public function addJsFile($file) {
 		$info = array(
@@ -74,7 +90,7 @@ class GdnView extends EventDispatcher {
 		}
 		foreach ($this->jsFiles as $jsFileInfo) {
 			$file = $jsFileInfo['file'];
-			$this->head->AddScript("js/$file");	
+			$this->head->addScript("js/$file");	
 		}
 		$this->addAsset($this->head, 'head');
 		
@@ -131,5 +147,4 @@ class GdnView extends EventDispatcher {
 		$Result = GetValueR($path, $this->data, $default);
 		return $Result;
 	}
-
 }

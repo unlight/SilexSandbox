@@ -1,0 +1,13 @@
+{
+    "name": "iamthes/configuration-service",
+    "description": "Configuration service for Silex.",
+    "require": {
+        "silex/silex": "1.*",
+        "iamthes/useful-functions": "dev-master"
+    },
+    "autoload": {
+    	"classmap": [
+    		"ConfigurationServiceProvider.php"
+    	]
+    }
+}

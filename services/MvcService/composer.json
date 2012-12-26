@@ -2,7 +2,8 @@
     "name": "iamthes/mvc-service-provider",
     "description": "MVC service provider for Silex.",
     "require": {
-        "silex/silex": "1.*"
+        "silex/silex": "1.*",
+        "iamthes/useful-functions": "dev-master"
     },
     "autoload": {
     	"classmap": [

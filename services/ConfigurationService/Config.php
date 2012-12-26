@@ -1,6 +1,10 @@
 <?php
-// Use $app['config']
-class Config {
+
+/**
+ * TODO: $app['config']['application.title']
+ */
+
+class Config implements ArrayAccess {
 
 	protected static $app;
 

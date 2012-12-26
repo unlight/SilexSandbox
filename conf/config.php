@@ -17,9 +17,6 @@ return array(
 		)
 	),
 	'enabledplugins' => array(
-		'GdnCore' => true, 
-		'GdnForm' => true, 
-		'GdnView' => true, 
 		'BodyIdentifier' => true, 
 		'RequestInfo' => true, 
 		'RedBean' => true, 
