@@ -18,7 +18,6 @@ return array(
 	),
 	'enabledplugins' => array(
 		'RedBean' => true, 
-		'ViewBodyClass' => true, 
 		'SqlBuilder' => true,
 	),
 );

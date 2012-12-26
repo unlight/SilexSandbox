@@ -3,7 +3,7 @@
 <head>
 	<?php $this->renderAsset('head') ?>
 </head>
-<body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['view.body.class'] ?>">
+<body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['body.class'] ?>">
 	<?php $this->dispatch('before.body'); ?>
 	<div id="Frame">
 	<div class="Head" id="Head">

@@ -50,7 +50,8 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$this->registerDefaultController();
 		$this->registerControllers();
 		$this->registerRequestInfo();
-		$this->registerbodyIdentifier();
+		$this->registerBodyIdentifier();
+		$this->registerBodyClass();
 	}
 
 	/**
@@ -130,8 +131,22 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	protected function registerBodyIdentifier() {
 		$app = $this->app;
 		$app['body.identifier'] = $app->share(function() use ($app) {
-			$requestInfo = $app['request.info'];
-			return $requestInfo['controller'] . '_' . $requestInfo['method'];
+			$info = $app['request.info'];
+			return $info['controller'] . '_' . $info['method'];
+		});
+	}
+
+
+	/**
+	 * [registerBodyClass description]
+	 * @return [type] [description]
+	 */
+	protected function registerBodyClass() {
+		$app = $this->app;
+		$app['body.class'] = $app->share(function() use ($app) {
+			$info = $app['request.info'];
+			$names = array($info['controller'], $info['method']);
+			return implode(' ', array_map('ucfirst', $names));
 		});
 	}
 }
