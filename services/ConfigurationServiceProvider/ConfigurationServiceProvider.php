@@ -21,23 +21,6 @@ class ConfigurationServiceProvider implements ServiceProviderInterface {
 	}
 
 	/**
-	 * Merge two arrays.
-	 * @param  array $arr1
-	 * @param  array $arr2
-	 * @return array
-	 */
-	public static function mergeArrays($arr1, $arr2) {
-		foreach($arr2 as $key => $value) {
-			if (array_key_exists($key, $arr1) && is_array($value)) {
-				$arr1[$key] = self::mergeArrays($arr1[$key], $arr2[$key]);
-			} else {
-				$arr1[$key] = $value;
-			}
-		}
-		return $arr1;
-	}
-
-	/**
 	 * Registers services on the given app.
 	 *
 	 * This method should only be used to configure services and parameters.
@@ -59,28 +42,26 @@ class ConfigurationServiceProvider implements ServiceProviderInterface {
 			$configuration = require "$path/config-defaults.php";
 		}
 		if (file_exists("$path/config.php")) {
-			$configuration = self::mergeArrays(require "$path/config.php", $configuration);
+			$configuration = mergeArrays(require "$path/config.php", $configuration);
 		}
 		// Loading configuration.
 		foreach ($configuration as $key => $value) {
 			$app[$key] = $value;
 		}
 
-
-		$app['config'] = function($name, $default) use ($app) {
-			$result = $default;
-			if (isset(self::$app[$name])) {
-				$result = self::$app[$name];
-			} else {
-
-			}
-			return $result;
-		};
-
-		// Config::app($app);
-		// $v = Config::{'debug'}();
-		// $v = Config::$debug;
-		// d($v);
+		// Function to get config value.
+		$app['config'] = $app->share(function($app) {
+			return function($name, $default = false) use ($app) {
+				$value = $default;
+				if (isset($app[$name])) {
+					$value = $app[$name];
+				} else {
+					$value = getValueR($name, $app, $default);
+					return $value;
+				}
+				return $value;
+			};
+		});
 	}
 
 	/**
