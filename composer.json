@@ -31,23 +31,23 @@
             "type": "package",
             "package": {
                 "name": "JosephLenton/PHP-Error",
-                "version": "1.1.2",
+                "version": "master",
                 "source": {
                     "url": "https://github.com/JosephLenton/PHP-Error.git",
                     "type": "git",
                     "reference": "master"
                 },
                 "autoload": {
-                    "classmap": {
-                        "php_error\\ErrorHandler": "src/php_error.php"
-                    }
+                    "classmap": [
+                        "src/php_error.php"
+                    ]
                 }
             }
         }, {
             "type": "package",
             "package": {
                 "name": "mikecao/sparrow",
-                "version": "1.2011",
+                "version": "master",
                 "source": {
                     "url": "https://github.com/mikecao/sparrow.git",
                     "type": "git",

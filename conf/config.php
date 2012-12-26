@@ -15,9 +15,5 @@ return array(
 			'path' => '/',
 			'domain' => ''
 		)
-	),
-	'enabledplugins' => array(
-		'RedBean' => true, 
-		'SqlBuilder' => true,
-	),
+	)
 );
