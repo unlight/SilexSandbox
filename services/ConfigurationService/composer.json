@@ -1,6 +1,6 @@
 {
-    "name": "iamthes/configuration-service-provider",
-    "description": "Configuration service provider for Silex.",
+    "name": "iamthes/configuration-service",
+    "description": "Configuration service for Silex.",
     "require": {
         "silex/silex": "1.*",
         "iamthes/useful-functions": "dev-master"

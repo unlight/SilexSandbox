@@ -4,7 +4,7 @@
 	* Manages collections of items to be placed between the <HEAD> tags of the
 	* page.
 	*/
- class HeadModule {
+ class HeadModule extends Module {
 		/**
 		 * The name of the key in a tag that refers to the tag's name.
 		 */
@@ -430,9 +430,5 @@
 			 }
 
 			 return $head;
-		}
-
-		public function __toString() {
-			return $this->toString();
 		}
 }

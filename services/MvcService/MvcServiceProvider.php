@@ -47,7 +47,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 			}
 		}
 
-		// $this->registerDefaultController();
+		$this->registerDefaultController();
 		$this->registerControllers();
 	}
 
@@ -83,7 +83,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	protected function registerDefaultController() {
 		$controllerFile = $this->controllers . '/' . 'root' . '.php';
 		if (file_exists($controllerFile)) {
-			$this->app->mount('/', $controllerFile);
+			$this->app->mount('/', require $controllerFile);
 		}
 	}
 

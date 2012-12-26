@@ -21,6 +21,7 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		$this->app = $app;
 		$self =& $this;
 		$controller = $app['controllers'];
+		// TODO: Do it by Reflection
 		foreach (get_class_methods($self) as $method) {
 			$controller->get("/{$method}", function() use ($app, $self, $method) {
 				$self->initialize();
@@ -89,7 +90,7 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		}
 		foreach ($this->jsFiles as $jsFileInfo) {
 			$file = $jsFileInfo['file'];
-			$this->head->AddScript("js/$file");	
+			$this->head->addScript("js/$file");	
 		}
 		$this->addAsset($this->head, 'head');
 		
