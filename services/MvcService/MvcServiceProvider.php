@@ -17,21 +17,6 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	protected $pathinfo;
 
 	/**
-	 * Returns pathInfo of request.
-	 * @return string
-	 */
-	protected function getPathinfo() {
-		if ($this->pathinfo === null) {
-			if (array_key_exists('PATH_INFO', $_SERVER)) {
-				$this->pathinfo = $_SERVER['PATH_INFO'];
-			} elseif (array_key_exists('SCRIPT_NAME', $_SERVER) && array_key_exists('PHP_SELF', $_SERVER)) {
-				$this->pathinfo = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']));
-			}
-		}
-		return $this->pathinfo;
-	}
-
-	/**
 	 * Registers services on the given app.
 	 *
 	 * This method should only be used to configure services and parameters.
@@ -39,19 +24,34 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @param Application $app An Application instance
 	 */
-	public function register(Application $app, $configuration = array()) {
+	public function register(Application $app) {
 		$this->app = $app;
-		if (is_array($configuration)) {
-			foreach ($configuration as $key => $value) {
-				
-			}
-		}
-
-		$this->registerDefaultController();
-		$this->registerControllers();
+		loadFunctions('request');
+		loadFunctions('string');
 		$this->registerRequestInfo();
 		$this->registerBodyIdentifier();
 		$this->registerBodyClass();
+		$this->registerDefaultController();
+		$this->registerControllersB();
+	}
+
+	/**
+	 * [registerControllersB description]
+	 * @return [type] [description]
+	 */
+	protected function registerControllersB() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_values(array_filter($pathinfo));
+		$controller = ucfirst($pathinfo[0]) . 'Controller';
+		$action = getValue(1, $pathinfo, 'index');
+		$controllerFile = $this->controllers . '/' . $pathinfo[0] . '.php';
+		$app = $this->app;
+		$app->match(implode('/', $pathinfo), function() use ($app, $controller, $action) {
+			$controllerMethod = array(new $controller($app), $action);
+			$resolver = $app['resolver'];
+			$arguments = $resolver->getArguments($app['request'], $controllerMethod);
+			return call_user_func_array($controllerMethod, $arguments);
+		});
 	}
 
 	/**
@@ -115,6 +115,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 				$key = array_search($routeParam, $parts);
 				if ($key !== false) unset($parts[$key]);
 			}
+			$parts = array_filter($parts);
 			$parts = array_values($parts);
 			
 			$result['controller'] = isset($parts[0]) ? $parts[0] : 'home';

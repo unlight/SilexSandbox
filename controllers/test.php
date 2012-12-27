@@ -2,7 +2,16 @@
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-$controller = $app['controllers_factory'];
+$controller = $app['controllers'];
+
+class Cn {
+
+	public function Index(Request $rq) {
+
+	}
+}
+
+$controller->match('/cn', 'Cn::Index');
 
 $controller->match('/', function (Application $app) { 
 	return 'Test Index.';

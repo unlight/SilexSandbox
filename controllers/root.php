@@ -1,8 +1,10 @@
 <?php
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+
 $root = $this->app['controllers_factory'];
 
-$root->get('/', function (Application $app) { 
+$root->match('/', function (Application $app, Request $rq) { 
 	return 'Root.'; 
 });
 

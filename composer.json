@@ -23,7 +23,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "classmap": [
-            "services"
+            "services", "controllers"
         ]
     },
     "repositories": [
