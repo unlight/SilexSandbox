@@ -9,12 +9,12 @@ if (file_exists('conf/bootstrap.before.php')) {
 }
 
 // Set error handler.
-$app->error(function(\Exception $e, $code) use ($app) {
-	if (!$app['debug']) return;
-	$handler = new php_error\ErrorHandler();
-	$handler->turnOn();
-	$handler->reportException($e);
-});
+// $app->error(function(\Exception $e, $code) use ($app) {
+// 	if (!$app['debug']) return;
+// 	$handler = new php_error\ErrorHandler();
+// 	$handler->turnOn();
+// 	$handler->reportException($e);
+// });
 
 // Register services.
 $app->register(new ConfigurationServiceProvider('conf'));

@@ -69,15 +69,16 @@ class Module {
 	public function __construct($sender = '', $applicationFolder = false) {
 		// if (!$sender) $sender = Gdn::Controller();
 		
-		if (is_object($sender)) {
-			$this->applicationFolder = $sender->ApplicationFolder;
-			$this->themeFolder = $sender->Theme;
-		} else {
-			$this->applicationFolder = 'dashboard';
-			// $this->themeFolder = Gdn::Config('Garden.Theme');
-		}
-		if ($applicationFolder !== false)
-			$this->applicationFolder = $applicationFolder;
+		// TODO: Fix
+		// if (is_object($sender)) {
+		// 	$this->applicationFolder = $sender->applicationFolder;
+		// 	$this->themeFolder = $sender->Theme;
+		// } else {
+		// 	$this->applicationFolder = 'dashboard';
+		// 	// $this->themeFolder = Gdn::Config('Garden.Theme');
+		// }
+		// if ($applicationFolder !== false)
+		// 	$this->applicationFolder = $applicationFolder;
 		
 		if (is_object($sender))
 			$this->sender = $sender;

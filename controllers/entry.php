@@ -8,8 +8,8 @@ class EntryController extends Controller {
 	}
 	
 	public function register(Application $app) {
-		d($_SERVER);
-		$form = $app['form'];
+		$this->form =$form = $app['form'];
+		// d(1, $app['request']->getBasePath(), GetWebRoot());
 		return $this->render();
 	}
 }

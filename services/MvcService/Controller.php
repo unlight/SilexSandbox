@@ -29,10 +29,30 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 				return $self->$method($app);
 			});
 		}
+		$app['controller'] = $this;
+		
 		return $controller;
 	}
 
 	public function initialize() {
+	}
+
+	/**
+	 * [transientKey description]
+	 * @param  [type] $NewKey [description]
+	 * @return [type]         [description]
+	 */
+	public function transientKey($NewKey = NULL) {
+		$session = $this->app['session'];
+		if ($NewKey !== NULL) {
+			$session = $this->app['session'];
+			$session->set('TransientKey', $NewKey);
+		}
+		if ($session->has('TransientKey')) {
+			return $session->get('TransientKey');
+		} else {
+			return RandomString(12);
+		}
 	}
 
 
@@ -71,6 +91,10 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		}
 	}
 
+	public function config($name, $default = false) {
+		return $this->app['config']($name, $default);
+	}
+
 	public function render($vars = array()) {
 		if (count($vars) == 0) {
 			$vars = get_object_vars($this);
@@ -84,7 +108,7 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 
 	public function renderMaster($vars, $viewPath, $masterViewPath) {
 
-		if (!$this->head) $this->head = new HeadModule();
+		if (!$this->head) $this->head = new HeadModule($this);
 		foreach ($this->cssFiles as $cssFileInfo) {
 			$file = $cssFileInfo['file'];
 			$this->head->addCss("design/$file");	

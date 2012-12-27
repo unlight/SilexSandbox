@@ -72,7 +72,7 @@ class Form {
 	protected $inlineErrors = false;
 
 	/**
-	 * @var object Model that enforces data rules on $this->_DataArray.
+	 * @var object Model that enforces data rules on $this->dataArray.
 	 * @access protected
 	 */
 	protected $model;
@@ -86,7 +86,7 @@ class Form {
 
 	/**
 	 * @var array $field => $value pairs from the form in the $post or $get collection 
-	 *    (depending on which method was specified for sending form data in $this->Method). 
+	 *    (depending on which method was specified for sending form data in $this->method). 
 	 *    Populated & accessed by $this->FormValues(). 
 	 *    Values can be retrieved with $this->GetFormValue($fieldName).
 	 * @access private
@@ -113,7 +113,7 @@ class Form {
 		}
 		
 		// Get custom error class
-		$this->errorClass = $this->C('Garden.Forms.InlineErrorClass', 'Error');
+		$this->errorClass = $this->config('Garden.Forms.InlineErrorClass', 'Error');
 	}
 
 
@@ -122,6 +122,16 @@ class Form {
 	 */
 	public function __construct($app) {
 		$this->app = $app;
+		$this->session = $app['session'];
+	}
+
+
+	/**
+	 * [transientKey description]
+	 * @return [type] [description]
+	 */
+	protected function transientKey() {
+		return $this->app['controller']->transientKey();
 	}
 
 	/**
@@ -131,11 +141,11 @@ class Form {
 	protected $app;
 
 	/**
-	 * [C description]
+	 * [config description]
 	 * @param [type]  $name    [description]
 	 * @param boolean $default [description]
 	 */
-	protected function C($name, $default = false) {
+	protected function config($name, $default = false) {
 		return $this->app['config']($name, $default);
 	}
 
@@ -145,10 +155,9 @@ class Form {
 	 * @param mixed $Mixed
 	 */
 	protected function FormatForm($Mixed) {
-		$charset = $this->C('charset', 'utf-8');
+		$charset = $this->config('charset', 'utf-8');
 		return htmlspecialchars($Mixed, ENT_QUOTES, $charset);
 	}
-	
 
 	/**
 	* Removes all non-alpha-numeric characters (except for _ and -) from
@@ -182,7 +191,7 @@ class Form {
 	
 	public function BodyBox($column = 'Body', $attributes = array()) {
 		TouchValue('MultiLine', $attributes, TRUE);
-		TouchValue('format', $attributes, $this->GetValue('Format', $this->C('Garden.InputFormatter')));
+		TouchValue('format', $attributes, $this->GetValue('Format', $this->config('Garden.InputFormatter')));
 		TouchValue('Wrap', $attributes, TRUE);
 		
 		$this->SetValue('Format', $attributes['format']);
@@ -227,7 +236,7 @@ class Form {
 	 * Returns XHTML for a standard calendar input control.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 * should related directly to a field name in $this->_DataArray.
+	 * should related directly to a field name in $this->dataArray.
 	 * @param array $attributes An associative array of attributes for the input. ie. onclick, class, etc
 	 * @return string
 	 * @todo Create calendar helper
@@ -317,7 +326,7 @@ class Form {
 			$return .= '<option value=""></option>';
 			
 		// Show root categories as headings (ie. you can't post in them)?
-		$doHeadings = $this->C('Vanilla.Categories.DoHeadings');
+		$doHeadings = $this->config('Vanilla.Categories.DoHeadings');
 		
 		// If making headings disabled and there was no default value for
 		// selection, make sure to select the first non-disabled value, or the
@@ -360,7 +369,7 @@ class Form {
 	 * Cannot assume checkboxes are stored in database as string 'TRUE'. (2010-07-28 loki_racer)
 	 *
 	 * @param string $fieldName Name of the field that is being displayed/posted with this input. 
-	 *    It should related directly to a field name in $this->_DataArray.
+	 *    It should related directly to a field name in $this->dataArray.
 	 * @param string $label Label to place next to the checkbox.
 	 * @param array $attributes Associative array of attributes for the input. (e.g. onclick, class)\
 	 *    Setting 'InlineErrors' to false prevents error message even if $this->InlineErrors is enabled.
@@ -374,7 +383,7 @@ class Form {
 			$attributes['checked'] = 'checked';
 			
 		// Show inline errors?
-		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults));
+		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->validationResults));
 		
 		// Add error class to input element
 		if ($showErrors) 
@@ -698,7 +707,7 @@ class Form {
 	 * Returns XHTML for a standard date input control.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 *    should related directly to a field name in $this->_DataArray.
+	 *    should related directly to a field name in $this->dataArray.
 	 * @param array $attributes An associative array of attributes for the input, e.g. onclick, class.
 	 *    Special attributes: 
 	 *       YearRange, specified in yyyy-yyyy format. Default is 1900 to current year.
@@ -737,7 +746,7 @@ class Form {
 		}
 		
 		// Show inline errors?
-		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults);
+		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->validationResults);
 		
 		// Add error class to input element
 		if ($showErrors) 
@@ -793,7 +802,7 @@ class Form {
 	 * Returns XHTML for a select list.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 *    should related directly to a field name in $this->_DataArray. ie. RoleID
+	 *    should related directly to a field name in $this->dataArray. ie. RoleID
 	 * @param mixed $dataSet The data to fill the options in the select list. Either an associative
 	 *    array or a database dataset.
 	 * @param array $attributes An associative array of attributes for the select. Here is a list of
@@ -807,7 +816,7 @@ class Form {
 	 *   TextField   The name of the field in       'text'
 	 *               $dataSet that contains the
 	 *               option text.
-	 *   Value       A string or array of strings.  $this->_DataArray->$fieldName
+	 *   Value       A string or array of strings.  $this->dataArray->$fieldName
 	 *   IncludeNull TRUE to include a blank row    false
 	 *               String to create disabled 
 	 *               first option.
@@ -819,7 +828,7 @@ class Form {
 	 */
 	public function DropDown($fieldName, $dataSet, $attributes = false) {
 		// Show inline errors?
-		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults));
+		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->validationResults));
 		
 		// Add error class to input element
 		if ($showErrors) 
@@ -959,9 +968,9 @@ class Form {
 	 */
 	public function Errors() {
 		$return = '';
-		if (is_array($this->_ValidationResults) && count($this->_ValidationResults) > 0) {
+		if (is_array($this->validationResults) && count($this->validationResults) > 0) {
 			$return = "<div class=\"Messages Errors\">\n<ul>\n";
-			foreach($this->_ValidationResults as $fieldName => $problems) {
+			foreach($this->validationResults as $fieldName => $problems) {
 				$count = count($problems);
 				for($i = 0; $i < $count; ++$i) {
 					if (substr($problems[$i], 0, 1) == '@')
@@ -979,8 +988,8 @@ class Form {
 	
 	public function ErrorString() {
 		$return = '';
-		if (is_array($this->_ValidationResults) && count($this->_ValidationResults) > 0) {
-			foreach($this->_ValidationResults as $fieldName => $problems) {
+		if (is_array($this->validationResults) && count($this->validationResults) > 0) {
+			foreach($this->validationResults as $fieldName => $problems) {
 				$count = count($problems);
 				for($i = 0; $i < $count; ++$i) {
 					if (substr($problems[$i], 0, 1) == '@')
@@ -1089,14 +1098,14 @@ class Form {
 	 */
 	public function GetHidden() {
 		$return = '';
-		if (is_array($this->HiddenInputs)) {
-			foreach($this->HiddenInputs as $name => $value) {
+		if (is_array($this->hiddenInputs)) {
+			foreach($this->hiddenInputs as $name => $value) {
 				$return .= $this->Hidden($name, array('value' => $value));
 			}
 			// Clean out the array
 			// mosullivan - removed cleanout so that entry forms can all have the same hidden inputs added once on the entry/index view.
 			// TODO - WATCH FOR BUGS BECAUSE OF THIS CHANGE.
-			// $this->HiddenInputs = array();
+			// $this->hiddenInputs = array();
 		}
 		return $return;
 	}
@@ -1106,7 +1115,7 @@ class Form {
 	 * Returns the xhtml for a hidden input.
 	 *
 	 * @param string $fieldName The name of the field that is being hidden/posted with this input. It
-	 * should related directly to a field name in $this->_DataArray.
+	 * should related directly to a field name in $this->dataArray.
 	 * @param array $attributes An associative array of attributes for the input. ie. maxlength, onclick,
 	 * class, etc
 	 * @return string
@@ -1128,12 +1137,12 @@ class Form {
 	 * @access public
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 *  should related directly to a field name in $this->_DataArray.
+	 *  should related directly to a field name in $this->dataArray.
 	 * @return string
 	 */
 	public function InlineError($fieldName) {
 		$appendError = '<p class="'.$this->errorClass.'">';
-		foreach ($this->_ValidationResults[$fieldName] as $validationError) {
+		foreach ($this->validationResults[$fieldName] as $validationError) {
 			$appendError .= sprintf(T($validationError),T($fieldName)).' ';
 		}
 		$appendError .= '</p>';
@@ -1145,7 +1154,7 @@ class Form {
 	 * Returns the xhtml for a standard input tag.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 *  should related directly to a field name in $this->_DataArray.
+	 *  should related directly to a field name in $this->dataArray.
 	 * @param string $type The type attribute for the input.
 	 * @param array $attributes An associative array of attributes for the input. (e.g. maxlength, onclick, class)
 	 *    Setting 'InlineErrors' to false prevents error message even if $this->InlineErrors is enabled.
@@ -1158,7 +1167,7 @@ class Form {
 		}
 		
 		// Show inline errors?
-		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults);
+		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->validationResults);
 		
 		// Add error class to input element
 		if ($showErrors) 
@@ -1262,33 +1271,33 @@ class Form {
 	 * @todo check that missing DataObject parameter
 	 */
 	public function Open($attributes = array()) {
-//      if ($this->InputPrefix)
-//         Trace($this->InputPrefix, 'InputPrefix');
+//      if ($this->inputPrefix)
+//         Trace($this->inputPrefix, 'inputPrefix');
 		
 		if (!is_array($attributes))
 			$attributes = array();
 		
 		$return = '<form';
-		if ($this->InputPrefix != '' || array_key_exists('id', $attributes)) $return .= $this->_IDAttribute($this->InputPrefix,
+		if ($this->inputPrefix != '' || array_key_exists('id', $attributes)) $return .= $this->_IDAttribute($this->inputPrefix,
 			$attributes);
 
 		// Method
 		$methodFromAttributes = ArrayValueI('method', $attributes);
-		$this->Method = $methodFromAttributes === false ? $this->Method : $methodFromAttributes;
+		$this->method = $methodFromAttributes === false ? $this->method : $methodFromAttributes;
 
 		// Action
 		$actionFromAttributes = ArrayValueI('action', $attributes);
-		if ($this->Action == '')
-			$this->Action = Url();
+		if ($this->action == '')
+			$this->action = Url();
 			
-		$this->Action = $actionFromAttributes === false ? $this->Action : $actionFromAttributes;
+		$this->action = $actionFromAttributes === false ? $this->action : $actionFromAttributes;
 
-		if (strcasecmp($this->Method, 'get') == 0) {
+		if (strcasecmp($this->method, 'get') == 0) {
 			// The path is not getting passed on get forms so put them in hidden fields.
-			$action = strrchr($this->Action, '?');
+			$action = strrchr($this->action, '?');
 			$exclude = GetValue('Exclude', $attributes, array());
 			if ($action !== false) {
-				$this->Action = substr($this->Action, 0, -strlen($action));
+				$this->action = substr($this->action, 0, -strlen($action));
 				parse_str(trim($action, '?'), $query);
 				$hiddens = '';
 				foreach ($query as $key => $value) {
@@ -1301,8 +1310,8 @@ class Form {
 			}
 		}
 
-		$return .= ' method="' . $this->Method . '"'
-			.' action="' . $this->Action . '"'
+		$return .= ' method="' . $this->method . '"'
+			.' action="' . $this->action . '"'
 			.$this->_AttributesToString($attributes)
 			.">\n<div>\n";
 
@@ -1310,12 +1319,11 @@ class Form {
 			$return .= $hiddens;
 
 		// Postback Key - don't allow it to be posted in the url (prevents csrf attacks & hijacks)
-		if ($this->Method != "get") {
-			$session = Gdn::Session();
+		if ($this->method != "get") {
 			$return .= $this->Hidden('TransientKey',
-				array('value' => $session->TransientKey()));
+				array('value' => $this->transientKey()));
 			// Also add a honeypot if Forms.HoneypotName has been defined
-			$honeypotName = $this->C('application.forms.honeypotname');
+			$honeypotName = $this->config('application.forms.honeypotname');
 			if ($honeypotName) $return .= $this->Hidden($honeypotName,
 				array('Name' => $honeypotName, 'style' => "display: none;"));
 		}
@@ -1331,7 +1339,7 @@ class Form {
 	 * Provides way of wrapping Input() with a label.
 	 *
 	 * @param string $fieldName Name of the field that is being displayed/posted with this input. 
-	 *    It should related directly to a field name in $this->_DataArray.
+	 *    It should related directly to a field name in $this->dataArray.
 	 * @param string $label Label to place next to the radio.
 	 * @param array $attributes Associative array of attributes for the input (e.g. onclick, class).
 	 *    Special values 'Value' and 'Default' (see RadioList).
@@ -1365,7 +1373,7 @@ class Form {
 	 * Returns XHTML for an unordered list of radio button elements.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. 
-	 *    It should related directly to a field name in $this->_DataArray. ie. RoleID
+	 *    It should related directly to a field name in $this->dataArray. ie. RoleID
 	 * @param mixed $dataSet The data to fill the options in the select list. Either an associative
 	 *    array or a database dataset.
 	 * @param array $attributes An associative array of attributes for the list. Here is a list of
@@ -1379,7 +1387,7 @@ class Form {
 	 *   TextField   The name of the field in       'text'
 	 *               $dataSet that contains the
 	 *               option text.
-	 *   Value       A string or array of strings.  $this->_DataArray->$fieldName
+	 *   Value       A string or array of strings.  $this->dataArray->$fieldName
 	 *   Default     The default value.             empty
 	 *   InlineErrors  Show inline error message?   TRUE
 	 *               Allows disabling per-dropdown
@@ -1401,7 +1409,7 @@ class Form {
 		}
 		
 		// Show inline errors?
-		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults));
+		$showErrors = ($this->_InlineErrors && array_key_exists($fieldName, $this->validationResults));
 		
 		// Add error class to input element
 		if ($showErrors) 
@@ -1440,7 +1448,7 @@ class Form {
 	 * Returns the xhtml for a text-based input.
 	 *
 	 * @param string $fieldName The name of the field that is being displayed/posted with this input. It
-	 *  should related directly to a field name in $this->_DataArray.
+	 *  should related directly to a field name in $this->dataArray.
 	 * @param array $attributes An associative array of attributes for the input. ie. maxlength, onclick,
 	 *  class, etc
 	 * @return string
@@ -1457,7 +1465,7 @@ class Form {
 		}
 		
 		// Show inline errors?
-		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->_ValidationResults);
+		$showErrors = $this->_InlineErrors && array_key_exists($fieldName, $this->validationResults);
 		
 		$cssClass = ArrayValueI('class', $attributes);
 		if ($cssClass == false) $attributes['class'] = $multiLine ? 'TextBox' : 'InputBox';
@@ -1532,15 +1540,15 @@ class Form {
 		
 		if ($fieldName == '') $fieldName = '<General Error>';
 
-		if (!is_array($this->_ValidationResults)) $this->_ValidationResults = array();
+		if (!is_array($this->validationResults)) $this->validationResults = array();
 
-		if (!array_key_exists($fieldName, $this->_ValidationResults)) {
-			$this->_ValidationResults[$fieldName] = array($errorCode);
+		if (!array_key_exists($fieldName, $this->validationResults)) {
+			$this->validationResults[$fieldName] = array($errorCode);
 		} else {
-			if (!is_array($this->_ValidationResults[$fieldName])) $this->_ValidationResults[$fieldName] = array(
-				$this->_ValidationResults[$fieldName],
+			if (!is_array($this->validationResults[$fieldName])) $this->validationResults[$fieldName] = array(
+				$this->validationResults[$fieldName],
 				$errorCode);
-			else $this->_ValidationResults[$fieldName][] = $errorCode;
+			else $this->validationResults[$fieldName][] = $errorCode;
 		}
 	}
 
@@ -1561,7 +1569,7 @@ class Form {
 		if ($this->IsPostBack() && $forceValue === false)
 			$value = $this->GetFormValue($fieldName, $value);
 
-		$this->HiddenInputs[$fieldName] = $value;
+		$this->hiddenInputs[$fieldName] = $value;
 	}
 	
 	/**
@@ -1573,10 +1581,20 @@ class Form {
 	 * @return bool
 	 */
 	public function AuthenticatedPostBack() {
+		// S: 27.12.2012 13:30:54
+		$KeyName = $this->EscapeFieldName('TransientKey');
+		$PostBackKey = GetPostValue($KeyName);
+
+		// TODO: Validate user, if UserID <= 0 return FALSE
+		$TransientKey = $this->transientKey();
+		return ($TransientKey == $PostBackKey);
+		
+
+
 		// Commenting this out because, technically, a get request is not a "postback".
 		// And since I typically use AuthenticatedPostBack to validate that a form has
 		// been posted back a get request should not be considered an authenticated postback.
-		//if ($this->Method == "get") {
+		//if ($this->method == "get") {
 		// forms sent with "get" method do not require authentication.
 		//   return TRUE;
 		//} else {
@@ -1619,9 +1637,9 @@ class Form {
 	 * @return int
 	 */
 	public function ErrorCount() {
-		if (!is_array($this->_ValidationResults)) $this->_ValidationResults = array();
+		if (!is_array($this->validationResults)) $this->validationResults = array();
 
-		return count($this->_ValidationResults);
+		return count($this->validationResults);
 	}
 
 	/**
@@ -1631,7 +1649,7 @@ class Form {
 	 * @return string
 	 */
 	public function EscapeFieldName($fieldName) {
-		$return = $this->InputPrefix;
+		$return = $this->inputPrefix;
 		if ($return != '') $return .= '/';
 		return $return . $this->EscapeString($fieldName);
 	}
@@ -1718,13 +1736,13 @@ class Form {
 		$magicQuotes = get_magic_quotes_gpc();
 
 		if (!is_array($this->_FormValues)) {
-			$tableName = $this->InputPrefix;
+			$tableName = $this->inputPrefix;
 			if(strlen($tableName) > 0)
 				$tableName .= '/';
 			$tableNameLength = strlen($tableName);
 			$this->_FormValues = array();
-			$collection = $this->Method == 'get' ? $get : $post;
-			$inputType = $this->Method == 'get' ? INPUT_GET : INPUT_POST;
+			$collection = $this->method == 'get' ? $get : $post;
+			$inputType = $this->method == 'get' ? INPUT_GET : INPUT_POST;
 			
 			
 			
@@ -1826,7 +1844,7 @@ class Form {
 	 * Gets the value associated with $fieldName.
 	 *
 	 * If the form has been posted back, it will retrieve the value from the form.
-	 * If it hasn't been posted back, it gets the value from $this->_DataArray.
+	 * If it hasn't been posted back, it gets the value from $this->dataArray.
 	 * Failing either of those, it returns $default.
 	 *
 	 * @param string $fieldName
@@ -1841,7 +1859,7 @@ class Form {
 		if ($this->IsMyPostBack()) {
 			$return = $this->GetFormValue($fieldName, $default);
 		} else {
-			$return = ArrayValue($fieldName, $this->_DataArray, $default);
+			$return = ArrayValue($fieldName, $this->dataArray, $default);
 		}
 		return $return;
 	}
@@ -1869,7 +1887,7 @@ class Form {
 		2012-06-27 - Using the request method to determine a postback.
 		*/
 		
-		switch (strtolower($this->Method)) {
+		switch (strtolower($this->method)) {
 			case 'get':
 				return count($get) > 0 || (is_array($this->FormValues()) && count($this->FormValues()) > 0) ? TRUE : false;
 			default:
@@ -1886,12 +1904,13 @@ class Form {
 	 * @return boolean
 	 */
 	public function IsMyPostBack() {
-		switch (strtolower($this->Method)) {
-			case 'get':
-				return count($get) > 0 || (is_array($this->FormValues()) && count($this->FormValues()) > 0) ? TRUE : false;
-			default:
-				return Gdn::Request()->IsPostBack();
-		}
+		return IsPostBack();
+		// switch (strtolower($this->method)) {
+		// 	case 'get':
+		// 		return count($get) > 0 || (is_array($this->FormValues()) && count($this->FormValues()) > 0) ? TRUE : false;
+		// 	default:
+		// 		return IsPostBack();
+		// }
 	}
 	
 	/**
@@ -1899,7 +1918,7 @@ class Form {
 	 * you want to save a simple model's data.
 	 *
 	 * It uses the assigned model to save the sent form fields.
-	 * If saving fails, it populates $this->_ValidationResults with validation errors & related fields.
+	 * If saving fails, it populates $this->validationResults with validation errors & related fields.
 	 *
 	 * @return unknown
 	 */
@@ -1952,14 +1971,14 @@ class Form {
 			if ($data instanceof DataSet) {
 				$resultSet = $data->ResultArray();
 				if (count($resultSet) > 0)
-					$this->_DataArray = $resultSet[0];
+					$this->dataArray = $resultSet[0];
 					
 			} else {
 				// Otherwise assume it is an object representation of a data row.
-				$this->_DataArray = Gdn_Format::ObjectAsArray($data);
+				$this->dataArray = Gdn_Format::ObjectAsArray($data);
 			}
 		} else if (is_array($data)) {
-			$this->_DataArray = $data;
+			$this->dataArray = $data;
 		}
 	}
 	
@@ -1976,12 +1995,12 @@ class Form {
 	}
 
 	/**
-	 * Set the name of the model that will enforce data rules on $this->_DataArray.
+	 * Set the name of the model that will enforce data rules on $this->dataArray.
 	 *
 	 * This value is also used to identify fields in the $post or $get
 	 * (depending on the forms method) collection when the form is submitted.
 	 *
-	 * @param Gdn_Model $model The Model that will enforce data rules on $this->_DataArray. This value
+	 * @param Gdn_Model $model The Model that will enforce data rules on $this->dataArray. This value
 	 *  is passed by reference so any changes made to the model outside this
 	 *  object apply when it is referenced here.
 	 * @param Ressource $dataSet A result resource containing data to be filled in the form.
@@ -1989,8 +2008,8 @@ class Form {
 	public function SetModel($model, $dataSet = false) {
 		$this->_Model = $model;
 		
-		if ($this->InputPrefix)
-			$this->InputPrefix = $this->_Model->Name;
+		if ($this->inputPrefix)
+			$this->inputPrefix = $this->_Model->Name;
 		if ($dataSet !== false) $this->SetData($dataSet);
 	}
 	
@@ -1998,24 +2017,24 @@ class Form {
 	 * @todo add documentation
 	 */
 	public function SetValidationResults($validationResults) {
-		if (!is_array($this->_ValidationResults)) $this->_ValidationResults = array();
+		if (!is_array($this->validationResults)) $this->validationResults = array();
 
-		$this->_ValidationResults = array_merge_recursive($this->_ValidationResults, $validationResults);
+		$this->validationResults = array_merge_recursive($this->validationResults, $validationResults);
 	}
 
 	/**
 	 * Sets the value associated with $fieldName.
 	 *
-	 * It sets the value in $this->_DataArray rather than in $this->_FormValues.
+	 * It sets the value in $this->dataArray rather than in $this->_FormValues.
 	 *
 	 * @param string $fieldName
 	 * @param mixed $default
 	 */
 	public function SetValue($fieldName, $value) {
-		if (!is_array($this->_DataArray))
-			$this->_DataArray = array();
+		if (!is_array($this->dataArray))
+			$this->dataArray = array();
 		
-		$this->_DataArray[$fieldName] = $value;
+		$this->dataArray[$fieldName] = $value;
 	} 
 
 	/**
@@ -2113,7 +2132,7 @@ class Form {
 	 */
 	public function ValidateModel() {
 		$this->_Model->DefineSchema();
-		if ($this->_Model->Validation->Validate($this->FormValues()) === false) $this->_ValidationResults = $this->_Model->ValidationResults();
+		if ($this->_Model->Validation->Validate($this->FormValues()) === false) $this->validationResults = $this->_Model->ValidationResults();
 		return $this->ErrorCount();
 	}
 
@@ -2145,7 +2164,7 @@ class Form {
 	 * @return array
 	 */
 	public function ValidationResults() {
-		return $this->_ValidationResults;
+		return $this->validationResults;
 	}
 	
 	
@@ -2237,7 +2256,7 @@ class Form {
 	/**
 	 * Creates a VALUE attribute for a form input and returns it in this format: [ value="VALUE"]
 	 *
-	 * @param string $fieldName The name of the field that contains the value in $this->_DataArray.
+	 * @param string $fieldName The name of the field that contains the value in $this->dataArray.
 	 * @param array $attributes An associative array of attributes for the input. ie. maxlength, onclick,
 	 *    class, etc. If $attributes contains a 'value' key, it will override the
 	 *    one automatically generated by $fieldName.

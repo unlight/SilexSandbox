@@ -29,5 +29,7 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 * a service must be requested).
 	 */
 	public function boot(Application $app) {
+		// Load custom functions.
+		LoadFunctions('Request');
 	}
 }
