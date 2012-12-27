@@ -1,1 +1,5 @@
-/* put your style here */
+#Body {
+    margin: 0 auto;
+    max-width: 980px;
+    width: 90%;
+}

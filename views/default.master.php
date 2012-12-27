@@ -20,12 +20,12 @@
 	</div>
 	<div id="Body">
 		<div class="Row">
-			<div class="Column PanelColumn" id="Panel">
+			<div class="PanelColumn" id="Panel">
 				<?php 
 				$this->renderAsset('panel');
 				?>
 			</div>
-			<div class="Column ContentColumn">
+			<div class="ContentColumn">
 				<?php
 					//$Breadcrumbs = $this->Data('Breadcrumbs');
 					//if ($Breadcrumbs && is_array($Breadcrumbs)) {
