@@ -116,29 +116,24 @@ class Form {
 		$this->errorClass = $this->config('Garden.Forms.InlineErrorClass', 'Error');
 	}
 
+	protected $app;
+	protected $sessionHandler;
 
 	/**
 	 * [__construct description]
 	 */
-	public function __construct($app) {
+	public function __construct($app, $sessionHandler) {
 		$this->app = $app;
-		$this->session = $app['session'];
+		$this->sessionHandler = $sessionHandler;
 	}
-
 
 	/**
 	 * [transientKey description]
 	 * @return [type] [description]
 	 */
 	protected function transientKey() {
-		return $this->app['controller']->transientKey();
+		return $this->sessionHandler->transientKey();
 	}
-
-	/**
-	 * [$app description]
-	 * @var Silex\Application
-	 */
-	protected $app;
 
 	/**
 	 * [config description]
@@ -148,7 +143,6 @@ class Form {
 	protected function config($name, $default = false) {
 		return $this->app['config']($name, $default);
 	}
-
 
 	/**
 	 * Gdn_Format::Form()

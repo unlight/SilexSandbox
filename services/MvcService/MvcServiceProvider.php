@@ -47,9 +47,10 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$controllerFile = $this->controllers . '/' . $pathinfo[0] . '.php';
 		$app = $this->app;
 		$app->match(implode('/', $pathinfo), function() use ($app, $controller, $action) {
-			$controllerMethod = array(new $controller($app), $action);
-			$resolver = $app['resolver'];
-			$arguments = $resolver->getArguments($app['request'], $controllerMethod);
+			$controller = new $controller($app);
+			$controller->initialize();
+			$controllerMethod = array($controller, $action);
+			$arguments = $app['resolver']->getArguments($app['request'], $controllerMethod);
 			return call_user_func_array($controllerMethod, $arguments);
 		});
 	}

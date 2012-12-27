@@ -15,7 +15,8 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Application $app) {
 		$app['form'] = function() use ($app) {
-			$form = new Form($app);
+			$session_handler = $app['session.handler'];
+			$form = new Form($app, $session_handler);
 			$form->construct();
 			return $form;
 		};

@@ -1,0 +1,14 @@
+{
+    "name": "iamthes/session-handler",
+    "description": "Session handler for Silex.",
+    "version": "1.0.0",
+    "require": {
+        "silex/silex": "1.*",
+        "iamthes/useful-functions": "dev-master"
+    },
+    "autoload": {
+    	"classmap": [
+    		""
+    	]
+    }
+}

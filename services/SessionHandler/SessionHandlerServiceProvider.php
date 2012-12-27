@@ -3,7 +3,7 @@
 use Silex\ServiceProviderInterface;
 use Silex\Application;
 
-class SessionServiceProvider implements ServiceProviderInterface {
+class SessionHandlerServiceProvider implements ServiceProviderInterface {
 
 	/**
 	 * Registers services on the given app.
@@ -14,10 +14,9 @@ class SessionServiceProvider implements ServiceProviderInterface {
 	 * @param Application $app An Application instance
 	 */
 	public function register(Application $app) {
-
-		// $app['session'] = $app->share(function ($app) {
-
-		// });
+		$app['session.handler'] = $app->share(function ($app) {
+			return new Unlight\SessionHandler($app);
+		});
 	}
 
 	/**

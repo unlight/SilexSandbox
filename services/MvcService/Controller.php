@@ -22,44 +22,8 @@ abstract class Controller extends EventDispatcher {
 		$this->app = $app;
 	}
 
-	// public function connect(Application $app) {
-	// 	$this->app = $app;
-	// 	$self =& $this;
-	// 	$controller = $app['controllers'];
-	// 	// TODO: Do it by Reflection
-	// 	// TODO: Extract require params...
-	// 	foreach (get_class_methods($self) as $method) {
-	// 		$controller->match($method, function() use ($app, $self, $method) {
-	// 			$self->initialize();
-	// 			return $self->$method($app);
-	// 		});
-	// 	}
-	// 	$app['controller'] = $this;
-		
-	// 	return $controller;
-	// }
-
 	public function initialize() {
 	}
-
-	/**
-	 * [transientKey description]
-	 * @param  [type] $NewKey [description]
-	 * @return [type]         [description]
-	 */
-	public function transientKey($NewKey = NULL) {
-		$session = $this->app['session'];
-		if ($NewKey !== NULL) {
-			$session = $this->app['session'];
-			$session->set('TransientKey', $NewKey);
-		}
-		if ($session->has('TransientKey')) {
-			return $session->get('TransientKey');
-		} else {
-			return RandomString(12);
-		}
-	}
-
 
 	public function addJsFile($file) {
 		$info = array(
