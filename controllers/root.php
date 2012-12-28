@@ -2,7 +2,7 @@
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-$root = $this->app['controllers_factory'];
+$root = $this->app['controllers'];
 
 $root->match('/', function (Application $app, Request $rq) { 
 	return 'Root.'; 

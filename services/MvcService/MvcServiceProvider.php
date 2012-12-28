@@ -33,6 +33,24 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$this->registerBodyClass();
 		$this->registerDefaultController();
 		$this->registerControllersB();
+		$this->registerControllersC();
+	}
+
+	/**
+	 * [registerControllersC description]
+	 * @return [type] [description]
+	 */
+	protected function registerControllersC() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_values(array_filter($pathinfo));
+		$firstpart = getvalue(0, $pathinfo);
+		if ($firstpart) {
+			$controllerFile = $this->controllers . '/' . $firstpart . '.php';
+			if (file_exists($controllerFile)) {
+				$app = $this->app;
+				require $controllerFile;
+			}
+		}
 	}
 
 	/**
