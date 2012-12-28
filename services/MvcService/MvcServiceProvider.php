@@ -32,6 +32,16 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$this->registerBodyIdentifier();
 		$this->registerBodyClass();
 		$this->registerDefaultController();
+		$this->registerMatchedController();
+	}
+
+	/**
+	 * [registerMatchedController description]
+	 * @return [type] [description]
+	 */
+	protected function registerMatchedController() {
+		// TODO: Keep one method.
+		// (C)
 		$this->registerControllersB();
 		$this->registerControllersC();
 	}

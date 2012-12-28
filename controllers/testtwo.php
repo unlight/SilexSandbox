@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app->match('/test2', 'TestTwoController::Index');
 
-
 /**
  * Test2 Controller
  */
