@@ -14,11 +14,18 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 * @param Application $app An Application instance
 	 */
 	public function register(Application $app) {
+		// Form.
 		$app['form'] = function() use ($app) {
 			$session_handler = $app['session.handler'];
 			$form = new Form($app, $session_handler);
 			$form->construct();
 			return $form;
+		};
+		// Validation.
+		$app['validation'] = function() use ($app) {
+			$validation = new Validation($app);
+			$validation->construct();
+			return $validation;
 		};
 	}
 
