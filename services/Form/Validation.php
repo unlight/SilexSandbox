@@ -99,7 +99,7 @@ class Validation {
 	 *
 	 * @param object $Schema A schema object to generate validation rules for.
 	 */
-	public function __construct($Schema = FALSE) {
+	public function construct($Schema = FALSE) {
 		if ($Schema !== FALSE)
 			$this->ApplyRulesBySchema($Schema);
 
@@ -129,6 +129,28 @@ class Validation {
 		$this->AddRule('PhoneInt', 'function:ValidatePhoneInt');
 		$this->AddRule('ZipCode', 'function:ValidateZipCode');
 		$this->AddRule('Format', 'function:ValidateFormat');
+	}
+
+	protected $app;
+
+	/**
+	 * [construct description]
+	 * @param  [type] $app [description]
+	 * @return [type]      [description]
+	 */
+	public function __construct($app) {
+		loadFunctions('validation');
+		loadFunctions('validate');
+		$this->app = $app;
+	}
+
+	/**
+	 * [config description]
+	 * @param [type]  $name    [description]
+	 * @param boolean $default [description]
+	 */
+	protected function config($name, $default = false) {
+		return $this->app['config']($name, $default);
 	}
 
 
@@ -551,9 +573,10 @@ class Validation {
 						// echo '<div>FieldName: '.$FieldName.'; Rule: '.$Rule.'</div>';
 						if (substr($Rule, 0, 9) == 'function:') {
 							$Function = substr($Rule, 9);
-							if (!function_exists($Function))
+							if (!function_exists($Function)) {
+								// trigger_error("Specified validation function could not be found ($Function).", E_USER_ERROR);
 								trigger_error(ErrorMessage('Specified validation function could not be found.', 'Validation', 'Validate', $Function), E_USER_ERROR);
-
+							}
 							// Call the function. Core-defined validation functions can
 							// be found in ./functions.validation.php
 							$FieldInfo = array('Name' => $FieldName);
@@ -582,6 +605,8 @@ class Validation {
 								$this->AddValidationResult($FieldName, $ErrorCode);
 							}
 						}
+					} else {
+						trigger_error("Specified validation rule '$RuleName' was not added.", E_USER_WARNING);
 					}
 				}
 			}
