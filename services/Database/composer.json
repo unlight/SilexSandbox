@@ -1,9 +1,10 @@
 {
     "name": "iamthes/database-service",
     "description": "Database service provider for Silex.",
-    "version": "1.0.0"
+    "version": "1.0.1"
     "require": {
-        "silex/silex": "1.*"
+        "silex/silex": "1.*",
+        "iamthes/configuration-service-provider": "dev-master",
     },
     "autoload": {
     	"classmap": [

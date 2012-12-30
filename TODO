@@ -1,1 +1,2 @@
-- database update structure
+- database update structure (see silex docs)
+- database service: add dependency to composer

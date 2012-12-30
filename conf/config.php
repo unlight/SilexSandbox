@@ -6,6 +6,12 @@ return array(
 		'user' => 'root',
 		'name' => 'silex',
 		'password' => '',
+		'structure' => array(
+			'access' => array(
+				'user' => 'root',
+				'password' => 'fok'
+			)
+		)
 	),
 	'application' => array(
 		'title' => 'Silex 1',
