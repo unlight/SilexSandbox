@@ -138,10 +138,12 @@ class Validation {
 	 * @param  [type] $app [description]
 	 * @return [type]      [description]
 	 */
-	public function __construct($app) {
+	public function __construct($app = null) {
 		loadFunctions('validation');
 		loadFunctions('validate');
-		$this->app = $app;
+		if (!is_null($app)) {
+			$this->app = $app;	
+		}
 	}
 
 	/**
@@ -150,7 +152,11 @@ class Validation {
 	 * @param boolean $default [description]
 	 */
 	protected function config($name, $default = false) {
-		return $this->app['config']($name, $default);
+		if ($this->app) {
+			return $this->app['config']($name, $default);
+		} else {
+			return $default;
+		}
 	}
 
 

@@ -5,11 +5,15 @@ class SqlBuilder extends Sparrow {
 	protected static $instance;
 	protected $selects = array();
 
-	public static function create() {
+	public static function instance() {
 		if (is_null(self::$instance)) {
 			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	public static function create() {
+		return self::instance();
 	}
 
 	public function reset() {
@@ -31,25 +35,4 @@ class SqlBuilder extends Sparrow {
 		}
 		return $result;
 	}
-
-	// protected $db;
-	// protected static $instance;
-
-	// public function __construct($db) {
-	// 	$this->db = $db;
-	// }
-
-	// public function start
-
-	// public static function __callStatic($name, $arguments) {
-	// 	if (self::$sparrow === null) {
-	// 		self::$sparrow = new Sparrow();
-	// 	}
-	// 	return call_user_func_array(array(self::$sparrow, $name), $arguments);
-	// }
 }
-
-
-return function($app) {
-
-};

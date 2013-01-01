@@ -1,8 +1,9 @@
 <?php
 
 use Silex\ServiceProviderInterface;
+use Silex\Application;
 
-class CookieIdentity {
+class Cookie implements ServiceProviderInterface {
 
     /**
      * Registers services on the given app.
@@ -13,7 +14,6 @@ class CookieIdentity {
      * @param Application $app An Application instance
      */
     public function register(Application $app) {
-
     }
 
     /**
@@ -24,12 +24,17 @@ class CookieIdentity {
      * a service must be requested).
      */
     public function boot(Application $app) {
-    	
+        // $configuration = $app['config']('cookie');
+        // $defaults = $this->getDefaults();
+    }
+
+    protected function getDefaults() {
+        return array(
+            'salt' => '',
+            'name' => 'silex',
+            'path' => '/',
+            'domain' => ''
+        );
     }
 
 }
-
-
-return function($app) {
-
-};

@@ -17,6 +17,12 @@ class StructureController {
 		$user->email = Column::String();
 		$user->hash_method = Column::String();
 		$user->gender = Column::String(1);
+
+		$user->provider = Column::String();
+		$user->provider_uid = Column::String();
+		$user->date_inserted = Column::DateTime();
+		$user->date_updated = Column::DateTime();
+
 		R::store($user);
 
 		R::freeze(true);
@@ -35,7 +41,7 @@ class StructureController {
 			return $this->runUpdate();
 		}
 		$response = new Response();
-		$response->headers->set('WWW-Authenticate', sprintf('Basic realm="%s"', 'site_login'));
+		$response->headers->set('WWW-Authenticate', sprintf('Basic realm="%s"', ''));
 		$response->setStatusCode(401, 'Please sign in.');
 		return $response;
 	}

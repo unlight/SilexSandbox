@@ -42,7 +42,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	protected function registerMatchedController() {
 		// TODO: Keep one method.
 		// (C)
-		$this->registerControllersB();
+		// $this->registerControllersB();
 		$this->registerControllersC();
 	}
 
@@ -52,8 +52,8 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 */
 	protected function registerControllersC() {
 		$pathinfo = explode('/', StaticRequest('PathInfo'));
-		$pathinfo = array_values(array_filter($pathinfo));
-		$firstpart = getvalue(0, $pathinfo);
+		$pathinfo = array_filter($pathinfo);
+		$firstpart = array_shift($pathinfo);
 		if ($firstpart) {
 			$controllerFile = $this->controllers . '/' . $firstpart . '.php';
 			if (file_exists($controllerFile)) {

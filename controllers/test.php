@@ -17,6 +17,9 @@ $controller->match('/', function (Application $app) {
 	return 'Test Index.';
 });
 
+$controller->match('test/3', function(Application $app) {
+});
+
 $controller->match('sparrow/2', function(Application $app) {
 	$sql = SqlBuilder::create()
 		->from('user u')
