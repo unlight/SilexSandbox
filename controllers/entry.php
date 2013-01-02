@@ -42,8 +42,10 @@ class EntryController extends Controller {
 	}
 
 	public function load1(Application $app) {
-		$user = R::load('user', 1);
-		$user = R::dispense('user', 1);
+		// $user = R::load('user', 1);
+		// $user = R::dispense('user', 1);
+		$userModel = new UserModel();
+		$user = $userModel->getId(1);
 		d($user);
 	}
 	

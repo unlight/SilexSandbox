@@ -16,6 +16,10 @@ class SqlBuilder extends Sparrow {
 		return self::instance();
 	}
 
+	public static function init() {
+		return self::instance();
+	}
+
 	public function reset() {
 		parent::reset();
 		$this->selects = array();
@@ -34,5 +38,13 @@ class SqlBuilder extends Sparrow {
 			$result = parent::select($fields, $limit, $offset);
 		}
 		return $result;
+	}
+
+	public function beans($type) {
+		$sql = $this->sql();
+		$rows = R::getAll($sql);
+		$redbean = R::getRedBean();
+		$beans = $redbean->convertToBeans($type, $rows);
+		return $beans;
 	}
 }

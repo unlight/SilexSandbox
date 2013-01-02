@@ -1,1 +1,2 @@
 model: simple model
+model: inject depency to model
