@@ -17,7 +17,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Application $app) {
 		$this->app = $app;
-		$config = $app['config']('database');
+		// $config = $app['config']('database');
 		$app->match('/structure/update', 'StructureController::Update');
 	}
 
