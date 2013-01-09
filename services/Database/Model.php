@@ -10,7 +10,7 @@ class Model extends RedBean_SimpleModel {
 		$this->validation = new Validation();
 	}
 
-	protected function beans($rows) {
+	protected static function beans($rows) {
 		if (is_string($rows)) {
 			$rows = R::getAll($rows);
 		}
@@ -50,13 +50,19 @@ class Model extends RedBean_SimpleModel {
 		} else {
 			$sqlBuilder->select();
 		}
+
 		$sql = $sqlBuilder->sql();
-		$result = R::getAll($sql);
+
+		if ($queryCount) {
+			$result = R::getCell($sql);
+		} else {
+			$result = $this->beans($sql);
+		}
 		return $result;
 	}
 
-	public function after_update() {
-		d(__METHOD__, func_get_args());
-	}
+	// public function after_update() {
+	// 	d(__METHOD__, func_get_args());
+	// }
 
 }

@@ -16,8 +16,7 @@ class StructureController {
 		$user->password = Column::String();
 		$user->email = Column::String();
 		$user->hash_method = Column::String();
-		$user->gender = Column::String(1);
-
+		$user->gender = '';
 		$user->provider = Column::String();
 		$user->provider_uid = Column::String();
 		$user->date_inserted = Column::DateTime();

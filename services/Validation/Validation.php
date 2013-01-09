@@ -141,7 +141,7 @@ class Validation {
 	public function __construct($configuration = null) {
 		loadFunctions('validation');
 		loadFunctions('validate');
-		if (!is_null(($configuration)) {
+		if (!is_null($configuration)) {
 			$this->configuration = $configuration;	
 		}
 	}

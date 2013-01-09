@@ -39,12 +39,4 @@ class SqlBuilder extends Sparrow {
 		}
 		return $result;
 	}
-
-	public function beans($type) {
-		$sql = $this->sql();
-		$rows = R::getAll($sql);
-		$redbean = R::getRedBean();
-		$beans = $redbean->convertToBeans($type, $rows);
-		return $beans;
-	}
 }
