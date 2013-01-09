@@ -13,6 +13,18 @@ class TController extends Controller {
 		$User = R::dispense('user');
 		$UserModel = new UserModel();
 		$FoundUser = $UserModel->GetID(1);
+		$UserModel->defineColumns();
+
+		$User->importValues(array(
+			'family' => 'XXX',
+			'name' => 'Joe'
+		));
+		d($User);
+
+		R::store($User);
+
+		d($User);
+
 		d($FoundUser);
 		
 		// $obj = RedBean_ModelHelper::factory('UserModel');
