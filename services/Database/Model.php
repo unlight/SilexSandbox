@@ -10,7 +10,7 @@ class Model extends RedBean_SimpleModel {
 		$this->validation = new Validation();
 	}
 
-	protected static function beans($rows) {
+	protected function beans($rows) {
 		if (is_string($rows)) {
 			$rows = R::getAll($rows);
 		}
@@ -19,12 +19,19 @@ class Model extends RedBean_SimpleModel {
 		return $beans;
 	}
 
+	public function update() {
+		$this->bean->date_updated = date('Y-m-d H:i:s');
+		if ($this->bean->getID() == 0) {
+			$this->bean->date_inserted = date('Y-m-d H:i:s');
+		}
+	}
+
 	public function getId($id) {
 		$sql = SqlBuilder::init()
 			->from($this->name)
-			->select()
 			->where('id', $id)
 			->limit(1)
+			->select()
 			->sql();
 		$beans = $this->beans($sql);
 		$result = reset($beans);
@@ -34,10 +41,10 @@ class Model extends RedBean_SimpleModel {
 	public function getWhere($where) {
 		$sql = SqlBuilder::init()
 			->from($this->name)
-			->select()
 			->where($where)
+			->select()
 			->sql();
-		$result = R::getAll($sql);
+		$result = $this->beans($sql);
 		return $result;
 	}
 
@@ -45,6 +52,7 @@ class Model extends RedBean_SimpleModel {
 		$queryCount = getValue('queryCount', $conditions);
 		$sqlBuilder = SqlBuilder::init();
 		$sqlBuilder->from($this->name);
+		
 		if ($queryCount) {
 			$sqlBuilder->select('count(*) as count');
 		} else {

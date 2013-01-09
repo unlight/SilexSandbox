@@ -1,2 +1,3 @@
+function: to generate password
 figure out how to update structure (migrate)
 model: inject depency to model
