@@ -17,21 +17,6 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	protected $pathinfo;
 
 	/**
-	 * Returns pathInfo of request.
-	 * @return string
-	 */
-	protected function getPathinfo() {
-		if ($this->pathinfo === null) {
-			if (array_key_exists('PATH_INFO', $_SERVER)) {
-				$this->pathinfo = $_SERVER['PATH_INFO'];
-			} elseif (array_key_exists('SCRIPT_NAME', $_SERVER) && array_key_exists('PHP_SELF', $_SERVER)) {
-				$this->pathinfo = substr($_SERVER['PHP_SELF'], strlen($_SERVER['SCRIPT_NAME']));
-			}
-		}
-		return $this->pathinfo;
-	}
-
-	/**
 	 * Registers services on the given app.
 	 *
 	 * This method should only be used to configure services and parameters.
@@ -39,16 +24,65 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @param Application $app An Application instance
 	 */
-	public function register(Application $app, $configuration = array()) {
+	public function register(Application $app) {
 		$this->app = $app;
-		if (is_array($configuration)) {
-			foreach ($configuration as $key => $value) {
-				
+		loadFunctions('request');
+		loadFunctions('string');
+		$this->registerRequestInfo();
+		$this->registerBodyIdentifier();
+		$this->registerBodyClass();
+		$this->registerDefaultController();
+		$this->registerMatchedController();
+	}
+
+	/**
+	 * [registerMatchedController description]
+	 * @return [type] [description]
+	 */
+	protected function registerMatchedController() {
+		// TODO: Keep one method.
+		// (C)
+		// $this->registerControllersB();
+		$this->registerControllersC();
+	}
+
+	/**
+	 * [registerControllersC description]
+	 * @return [type] [description]
+	 */
+	protected function registerControllersC() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_filter($pathinfo);
+		$firstpart = array_shift($pathinfo);
+		if ($firstpart) {
+			$controllerFile = $this->controllers . '/' . $firstpart . '.php';
+			if (file_exists($controllerFile)) {
+				$app = $this->app;
+				require $controllerFile;
 			}
 		}
+	}
 
-		$this->registerDefaultController();
-		$this->registerControllers();
+	/**
+	 * [registerControllersB description]
+	 * @return [type] [description]
+	 */
+	protected function registerControllersB() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_values(array_filter($pathinfo));
+		$controller = ucfirst($pathinfo[0]) . 'Controller';
+		$action = getValue(1, $pathinfo, 'index');
+		$controllerFile = $this->controllers . '/' . $pathinfo[0] . '.php';
+		$app = $this->app;
+		$app->match(implode('/', $pathinfo), function() use ($app, $controller, $action) {
+			$controller = new $controller($app);
+			if (method_exists($controller, 'initialize')) {
+				$controller->initialize();
+			}
+			$controllerMethod = array($controller, $action);
+			$arguments = $app['resolver']->getArguments($app['request'], $controllerMethod);
+			return call_user_func_array($controllerMethod, $arguments);
+		});
 	}
 
 	/**
@@ -63,7 +97,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$slashPos = strpos($path, '/');
 		if ($slashPos === false) return;
 		$name = substr($path, 0, $slashPos);
-		if (!$name) {
+		if ($name) {
 			$controllerFile = $this->controllers . '/' . $name. '.php';
 			if (file_exists($controllerFile)) {
 				$module = require $controllerFile;
@@ -95,5 +129,56 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 * a service must be requested).
 	 */
 	public function boot(Application $app) {
+	}
+
+	/**
+	 * [registerRequestInfo description]
+	 * @return [type] [description]
+	 */
+	protected function registerRequestInfo() {
+		$app = $this->app;
+		$app['request.info'] = $app->share(function() use ($app) {
+			$routeName = $app['request']->attributes->get('_route');
+			$routeName = str_replace(array('GET', 'POST'), '', $routeName);
+			$routeParams = array_keys($app['request']->attributes->get('_route_params'));
+			$parts = explode('_', $routeName);
+			foreach ($routeParams as $routeParam) {
+				$key = array_search($routeParam, $parts);
+				if ($key !== false) unset($parts[$key]);
+			}
+			$parts = array_filter($parts);
+			$parts = array_values($parts);
+			
+			$result['controller'] = isset($parts[0]) ? $parts[0] : 'home';
+			$result['method'] = isset($parts[1]) ? $parts[1] : 'index';
+
+			return $result;
+		});
+	}
+
+	/**
+	 * [registerBodyIdentifier description]
+	 * @return [type] [description]
+	 */
+	protected function registerBodyIdentifier() {
+		$app = $this->app;
+		$app['body.identifier'] = $app->share(function() use ($app) {
+			$info = $app['request.info'];
+			return $info['controller'] . '_' . $info['method'];
+		});
+	}
+
+
+	/**
+	 * [registerBodyClass description]
+	 * @return [type] [description]
+	 */
+	protected function registerBodyClass() {
+		$app = $this->app;
+		$app['body.class'] = $app->share(function() use ($app) {
+			$info = $app['request.info'];
+			$names = array($info['controller'], $info['method']);
+			return implode(' ', array_map('ucfirst', $names));
+		});
 	}
 }

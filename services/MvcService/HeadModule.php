@@ -50,6 +50,27 @@
 		}
 
 		/**
+		 * [config description]
+		 * @param  [type]  $name    [description]
+		 * @param  boolean $default [description]
+		 * @return [type]           [description]
+		 */
+		protected function config($name, $default = false) {
+			return $this->sender->config($name, $default);
+		}
+
+		/**
+		 * [FormatText description]
+		 * @param [type] $value [description]
+		 */
+		protected function FormatText($value) {
+			if (!function_exists('FormatText')) {
+				LoadFunctions('Format');	
+			}
+			return FormatText($value);
+		}
+
+		/**
 		 * Adds a "link" tag to the head containing a reference to a stylesheet.
 		 *
 		 * @param string $hRef Location of the stylesheet relative to the web root (if an absolute path with http:// is provided, it will use the HRef as provided). ie. /themes/default/css/layout.css or http://url.com/layout.css
@@ -78,7 +99,7 @@
 			 $this->addTag('link', array(
 					'rel' => 'alternate',
 					'type' => 'application/rss+xml',
-					'title' => Gdn_Format::Text($title),
+					'title' => $this->FormatText($title),
 					'href' => Asset($hRef)
 			 ));
 		}
@@ -262,7 +283,7 @@
 			 } else if ($noSubTitle) {
 					return GetValueR('Data.Title', $this->sender, '');
 			 } else {
-					$subtitle = GetValueR('Data._Subtitle', $this->sender, C('Garden.Title'));
+					$subtitle = GetValueR('Data._Subtitle', $this->sender, $this->config('application.title'));
 					
 					// Default Return title from controller's Data.Title + banner title;
 					return ConcatSep(' - ', GetValueR('Data.Title', $this->sender, ''), $subtitle);
@@ -292,7 +313,7 @@
 		 */
 		public function ToString() {
 			 // Add the canonical Url if necessary.
-			 if (method_exists($this->sender, 'CanonicalUrl') && !C('Garden.Modules.NoCanonicalUrl', false)) {
+			 if (method_exists($this->sender, 'CanonicalUrl') && !$this->config('application.nocanonicalurl', false)) {
 					$canonicalUrl = $this->sender->CanonicalUrl();
 					
 					if (!IsUrl($canonicalUrl))
@@ -306,15 +327,16 @@
 			 }
 			 
 			 // Include facebook open-graph meta information.
-			 if ($fbAppID = C('Plugins.Facebook.ApplicationID')) {
+			 
+			 if ($fbAppID = $this->config('Plugins.Facebook.ApplicationID')) {
 					$this->addTag('meta', array('property' => 'fb:app_id', 'content' => $fbAppID));
 			 }
 			 
-			 $siteName = C('Garden.Title', '');
+			 $siteName = $this->config('Garden.Title', '');
 			 if ($siteName != '')
 					$this->addTag('meta', array('property' => 'og:site_name', 'content' => $siteName));
 			 
-			 $title = Gdn_Format::Text($this->title('', TRUE));
+			 $title = $this->FormatText($this->title('', TRUE));
 			 if ($title != '')
 					$this->addTag('meta', array('property' => 'og:title', 'itemprop' => 'name', 'content' => $title));
 			 
@@ -330,7 +352,7 @@
 			 // Default to the site logo if there were no images provided by the controller.
 			 if (is_object($this->sender) && method_exists($this->sender, 'Image')):
 			 if (count($this->sender->Image()) == 0) {
-					$logo = C('Garden.ShareImage', C('Garden.Logo', ''));
+					$logo = $this->config('Garden.ShareImage', $this->config('Garden.Logo', ''));
 					if ($logo != '') {
 						 // Fix the logo path.
 						 if (StringBeginsWith($logo, 'uploads/'))
@@ -356,7 +378,7 @@
 			 $tags2 = $this->tags;
 
 			 // Start with the title.
-			 $head = '<title>'.Gdn_Format::Text($this->title())."</title>\n";
+			 $head = '<title>'.$this->FormatText($this->title())."</title>\n";
 
 			 $tagStrings = array();
 			 // Loop through each tag.

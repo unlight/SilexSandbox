@@ -6,6 +6,16 @@ return array(
 		'user' => 'root',
 		'name' => 'silex',
 		'password' => '',
+		'structure' => array(
+			'access' => array(
+				'user' => 'root',
+				'password' => 'fok'
+			)
+		)
+	),
+	'facebook' => array(
+		'id' => '112828485553107',
+		'secret' => 'ee2d4d3ce64ef059fa5b0e5b2d639460'
 	),
 	'application' => array(
 		'title' => 'Silex 1',
@@ -15,12 +25,5 @@ return array(
 			'path' => '/',
 			'domain' => ''
 		)
-	),
-	'enabledplugins' => array(
-		'BodyIdentifier' => true, 
-		'RequestInfo' => true, 
-		'RedBean' => true, 
-		'ViewBodyClass' => true, 
-		'SqlBuilder' => true,
-	),
+	)
 );

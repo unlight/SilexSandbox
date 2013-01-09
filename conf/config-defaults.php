@@ -15,7 +15,12 @@ return array(
 			'name' => 'silex',
 			'path' => '/',
 			'domain' => ''
+		),
+		'session' => array(
+			'length' => '15 minutes'
+		),
+		'forms' => array(
+			'honeypotname' => 'hpt'
 		)
 	),
-	'enabledplugins' => array(),
 );

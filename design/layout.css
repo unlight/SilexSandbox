@@ -1,1 +1,41 @@
-/* put your style here */
+body {
+	line-height: 140%;
+}
+
+#Body {
+    margin: 0 auto;
+    max-width: 980px;
+    width: 90%;
+}
+
+h1 {
+	border-bottom: 1px solid #eee;
+}
+
+.Box {
+	border-radius: 2px;
+	background: #fafafa;
+	padding: 8px;
+}
+
+.Box h4 {
+	margin-top: 0;
+}
+
+.Messages {
+	border: 1px solid #a00;
+	background: #d50a0a;
+	padding: 6px 10px;
+	display: block;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	color: #fff;
+	margin: 10px 0;
+}
+
+.Messages ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}

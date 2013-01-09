@@ -3,7 +3,7 @@
 use Silex\ServiceProviderInterface;
 use Silex\Application;
 
-class FormServiceProvider implements ServiceProviderInterface {
+class SessionHandlerServiceProvider implements ServiceProviderInterface {
 
 	/**
 	 * Registers services on the given app.
@@ -14,19 +14,9 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 * @param Application $app An Application instance
 	 */
 	public function register(Application $app) {
-		// Form.
-		$app['form'] = function() use ($app) {
-			$session_handler = $app['session.handler'];
-			$form = new Form($app, $session_handler);
-			$form->construct();
-			return $form;
-		};
-		// Validation.
-		$app['validation'] = function() use ($app) {
-			$validation = new Validation($app);
-			$validation->construct();
-			return $validation;
-		};
+		$app['session.handler'] = $app->share(function ($app) {
+			return new Unlight\SessionHandler($app);
+		});
 	}
 
 	/**
@@ -37,7 +27,5 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 * a service must be requested).
 	 */
 	public function boot(Application $app) {
-		// Load custom functions.
-		LoadFunctions('Request');
 	}
 }

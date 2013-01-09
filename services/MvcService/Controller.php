@@ -1,12 +1,13 @@
 <?php
 
 use Silex\Application;
-use Silex\ControllerProviderInterface;
+// use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-abstract class Controller extends EventDispatcher implements ControllerProviderInterface {
+// abstract class Controller extends EventDispatcher implements ControllerProviderInterface {
+abstract class Controller extends EventDispatcher {
 	
 	protected $app;
 	protected $assets = array();
@@ -17,23 +18,12 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 	protected $jsFiles = array();
 	public $head;
 
-	public function connect(Application $app) {
+	public function __construct(Application $app) {
 		$this->app = $app;
-		$self =& $this;
-		$controller = $app['controllers'];
-		// TODO: Do it by Reflection
-		foreach (get_class_methods($self) as $method) {
-			$controller->get("/{$method}", function() use ($app, $self, $method) {
-				$self->initialize();
-				return $self->$method($app);
-			});
-		}
-		return $controller;
 	}
 
 	public function initialize() {
 	}
-
 
 	public function addJsFile($file) {
 		$info = array(
@@ -70,6 +60,10 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		}
 	}
 
+	public function config($name, $default = false) {
+		return $this->app['config']($name, $default);
+	}
+
 	public function render($vars = array()) {
 		if (count($vars) == 0) {
 			$vars = get_object_vars($this);
@@ -78,12 +72,13 @@ abstract class Controller extends EventDispatcher implements ControllerProviderI
 		$view = 'views/' . $this->view . '.php';
 		if (!$this->masterView) $this->masterView = 'default.master.php';
 		$masterView = 'views/' . $this->masterView;
+		// d($masterView, $view);
 		return $this->renderMaster($vars, $view, $masterView);
 	}
 
 	public function renderMaster($vars, $viewPath, $masterViewPath) {
 
-		if (!$this->head) $this->head = new HeadModule();
+		if (!$this->head) $this->head = new HeadModule($this);
 		foreach ($this->cssFiles as $cssFileInfo) {
 			$file = $cssFileInfo['file'];
 			$this->head->addCss("design/$file");	

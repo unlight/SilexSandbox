@@ -3,7 +3,7 @@
 <head>
 	<?php $this->renderAsset('head') ?>
 </head>
-<body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['view.body.class'] ?>">
+<body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['body.class'] ?>">
 	<?php $this->dispatch('before.body'); ?>
 	<div id="Frame">
 	<div class="Head" id="Head">
@@ -20,12 +20,12 @@
 	</div>
 	<div id="Body">
 		<div class="Row">
-			<div class="Column PanelColumn" id="Panel">
+			<div class="PanelColumn" id="Panel">
 				<?php 
 				$this->renderAsset('panel');
 				?>
 			</div>
-			<div class="Column ContentColumn">
+			<div class="ContentColumn">
 				<?php
 					//$Breadcrumbs = $this->Data('Breadcrumbs');
 					//if ($Breadcrumbs && is_array($Breadcrumbs)) {

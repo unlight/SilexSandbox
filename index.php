@@ -8,24 +8,22 @@ if (file_exists('conf/bootstrap.before.php')) {
 	require_once 'conf/bootstrap.before.php';
 }
 
+# Set error handler.
+if (!$app['debug']) {
+	$handler = new php_error\ErrorHandler();
+	$handler->turnOn();
+	$app->error(function(\Exception $e, $code) use ($app, $handler) {
+		$handler->reportException($e);
+	});
+}
+
+// Register services.
 $app->register(new ConfigurationServiceProvider('conf'));
 $app->register(new MvcServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
+$app->register(new \SessionHandlerServiceProvider());
+$app->register(new FormServiceProvider());
+$app->register(new DatabaseServiceProvider());
 
-// Set error handler.
-$app->error(function(\Exception $e, $code) use ($app) {
-	if (!$app['debug']) return;
-	$handler = new php_error\ErrorHandler();
-	$handler->turnOn();
-	$handler->reportException($e);
-});
-
-// Include plugins.
-foreach ($app['enabledplugins'] as $pluginName => $enabled) {
-	if ($enabled !== true) continue;
-	$pluginFile = "plugins/{$pluginName}/{$pluginName}.php";
-	$plugin = include $pluginFile;
-	if (is_callable($plugin)) $plugin($app);
-}
-
+// Run application.
 $app->run();
