@@ -19,7 +19,6 @@ class TController extends Controller {
 			'family' => 'XXX',
 			'name' => 'Joe'
 		));
-		d($User);
 
 		R::store($User);
 

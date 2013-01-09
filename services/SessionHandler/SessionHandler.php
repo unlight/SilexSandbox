@@ -23,6 +23,7 @@ class SessionHandler {
 		if ($this->userId > 0) {
 			$session = $this->app['session'];
 			$session->set('userId', $this->userId);
+			$this->transientKey(randomString(12));
 		}
 	}
 

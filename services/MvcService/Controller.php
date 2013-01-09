@@ -140,4 +140,8 @@ abstract class Controller extends EventDispatcher {
 		$Result = GetValueR($path, $this->data, $default);
 		return $Result;
 	}
+
+	public function redirect($url, $code = 302) {
+		return $this->app->redirect($url, $code);
+	}
 }

@@ -89,8 +89,4 @@ class Model extends RedBean_SimpleModel {
 		return $result;
 	}
 
-	// public function after_update() {
-	// 	d(__METHOD__, func_get_args());
-	// }
-
 }
