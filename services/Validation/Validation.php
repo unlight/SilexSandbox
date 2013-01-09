@@ -131,29 +131,30 @@ class Validation {
 		$this->AddRule('Format', 'function:ValidateFormat');
 	}
 
-	protected $app;
+	protected $configuration;
 
 	/**
 	 * [construct description]
 	 * @param  [type] $app [description]
 	 * @return [type]      [description]
 	 */
-	public function __construct($app = null) {
+	public function __construct($configuration = null) {
 		loadFunctions('validation');
 		loadFunctions('validate');
-		if (!is_null($app)) {
-			$this->app = $app;	
+		if (!is_null($configuration)) {
+			$this->configuration = $configuration;	
 		}
 	}
 
 	/**
-	 * [config description]
-	 * @param [type]  $name    [description]
-	 * @param boolean $default [description]
+	 * [configuration description]
+	 * @param  [type]  $name    [description]
+	 * @param  boolean $default [description]
+	 * @return [type]           [description]
 	 */
-	protected function config($name, $default = false) {
-		if ($this->app) {
-			return $this->app['config']($name, $default);
+	protected function configuration($name, $default = false) {
+		if ($this->configuration) {
+			return $this->configuration($name, $default);
 		} else {
 			return $default;
 		}
@@ -559,7 +560,7 @@ class Validation {
 			$this->_ValidationResults = array();
 
 		// Check for a honeypot (anti-spam input)
-		$HoneypotName = $this->config('application.forms.honeypotname', '');
+		$HoneypotName = $this->configuration('application.forms.honeypotname', '');
 		$HoneypotContents = GetPostValue($HoneypotName, '');
 		if ($HoneypotContents != '')
 			$this->AddValidationResult($HoneypotName, "You've filled our honeypot! We use honeypots to help prevent spam. If you're  not a spammer or a bot, you should contact the application administrator for help.");

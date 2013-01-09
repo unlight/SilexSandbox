@@ -1,0 +1,14 @@
+{
+    "name": "iamthes/validation-service",
+    "description": "Validation service provider for Silex.",
+    "require": {
+        "silex/silex": "1.*",
+        "iamthes/configuration-service-provider": "dev-master",
+        "iamthes/useful-functions": "dev-master"
+    },
+    "autoload": {
+    	"classmap": [
+    		""
+    	]
+    }
+}

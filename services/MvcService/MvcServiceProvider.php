@@ -40,9 +40,6 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 * @return [type] [description]
 	 */
 	protected function registerMatchedController() {
-		// TODO: Keep one method.
-		// (C)
-		// $this->registerControllersB();
 		$this->registerControllersC();
 	}
 
@@ -61,28 +58,6 @@ class MvcServiceProvider implements ServiceProviderInterface {
 				require $controllerFile;
 			}
 		}
-	}
-
-	/**
-	 * [registerControllersB description]
-	 * @return [type] [description]
-	 */
-	protected function registerControllersB() {
-		$pathinfo = explode('/', StaticRequest('PathInfo'));
-		$pathinfo = array_values(array_filter($pathinfo));
-		$controller = ucfirst($pathinfo[0]) . 'Controller';
-		$action = getValue(1, $pathinfo, 'index');
-		$controllerFile = $this->controllers . '/' . $pathinfo[0] . '.php';
-		$app = $this->app;
-		$app->match(implode('/', $pathinfo), function() use ($app, $controller, $action) {
-			$controller = new $controller($app);
-			if (method_exists($controller, 'initialize')) {
-				$controller->initialize();
-			}
-			$controllerMethod = array($controller, $action);
-			$arguments = $app['resolver']->getArguments($app['request'], $controllerMethod);
-			return call_user_func_array($controllerMethod, $arguments);
-		});
 	}
 
 	/**

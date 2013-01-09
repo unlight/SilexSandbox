@@ -64,10 +64,8 @@ abstract class Controller extends EventDispatcher {
 		return $this->app['config']($name, $default);
 	}
 
-	public function render($vars = array()) {
-		if (count($vars) == 0) {
-			$vars = get_object_vars($this);
-		}
+	public function render() {
+		$vars = get_object_vars($this);
 		if (!$this->view) $this->view = $this->getControllerName() . '/' . $this->getMethodName();
 		$view = 'views/' . $this->view . '.php';
 		if (!$this->masterView) $this->masterView = 'default.master.php';

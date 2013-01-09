@@ -116,15 +116,15 @@ class Form {
 		$this->errorClass = $this->config('Garden.Forms.InlineErrorClass', 'Error');
 	}
 
-	protected $app;
+	protected $configuration;
 	protected $sessionHandler;
 
 	/**
 	 * [__construct description]
 	 */
-	public function __construct($app, $sessionHandler) {
+	public function __construct($configuration, $sessionHandler) {
 		loadFunctions('render');
-		$this->app = $app;
+		$this->configuration = $configuration;
 		$this->sessionHandler = $sessionHandler;
 	}
 
@@ -138,11 +138,12 @@ class Form {
 
 	/**
 	 * [config description]
-	 * @param [type]  $name    [description]
-	 * @param boolean $default [description]
+	 * @param  [type]  $name    [description]
+	 * @param  boolean $default [description]
+	 * @return [type]           [description]
 	 */
 	protected function config($name, $default = false) {
-		return $this->app['config']($name, $default);
+		return $this->configuration($name, $default);
 	}
 
 	/**

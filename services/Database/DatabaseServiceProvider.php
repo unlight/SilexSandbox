@@ -17,7 +17,6 @@ class DatabaseServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Application $app) {
 		$this->app = $app;
-		// $config = $app['config']('database');
 		$app->match('/structure/update', 'StructureController::Update');
 	}
 
@@ -35,8 +34,6 @@ class DatabaseServiceProvider implements ServiceProviderInterface {
 			$dsn = $app['database']['engine'] . ':host=' . $app['database']['host'] . ';dbname=' . $app['database']['name'];
 		}
 		R::setup($dsn, $app['database']['user'], $app['database']['password']);
-		// $freeze = $app['config']('database.structure.freeze', true);
-		// R::freeze($freeze);
 		R::freeze(true);
 		RedBean_ModelHelper::setModelFormatter(new ModelFormatter());
 	}

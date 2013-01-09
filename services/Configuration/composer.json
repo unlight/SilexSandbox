@@ -1,6 +1,7 @@
 {
     "name": "iamthes/configuration-service",
     "description": "Configuration service for Silex.",
+    "version": "1.0.1"
     "require": {
         "silex/silex": "1.*",
         "iamthes/useful-functions": "dev-master"

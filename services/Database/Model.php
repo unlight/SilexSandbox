@@ -1,6 +1,5 @@
 <?php
 
-// class Model extends RedBean_SimpleModel {
 class Model extends RedBean_SimpleModel {
 
 	protected $name;
@@ -20,12 +19,19 @@ class Model extends RedBean_SimpleModel {
 		return $beans;
 	}
 
+	public function update() {
+		$this->bean->date_updated = date('Y-m-d H:i:s');
+		if ($this->bean->getID() == 0) {
+			$this->bean->date_inserted = date('Y-m-d H:i:s');
+		}
+	}
+
 	public function getId($id) {
 		$sql = SqlBuilder::init()
 			->from($this->name)
-			->select()
 			->where('id', $id)
 			->limit(1)
+			->select()
 			->sql();
 		$beans = $this->beans($sql);
 		$result = reset($beans);
@@ -35,10 +41,10 @@ class Model extends RedBean_SimpleModel {
 	public function getWhere($where) {
 		$sql = SqlBuilder::init()
 			->from($this->name)
-			->select()
 			->where($where)
+			->select()
 			->sql();
-		$result = R::getAll($sql);
+		$result = $this->beans($sql);
 		return $result;
 	}
 
@@ -46,18 +52,25 @@ class Model extends RedBean_SimpleModel {
 		$queryCount = getValue('queryCount', $conditions);
 		$sqlBuilder = SqlBuilder::init();
 		$sqlBuilder->from($this->name);
+		
 		if ($queryCount) {
 			$sqlBuilder->select('count(*) as count');
 		} else {
 			$sqlBuilder->select();
 		}
+
 		$sql = $sqlBuilder->sql();
-		$result = R::getAll($sql);
+
+		if ($queryCount) {
+			$result = R::getCell($sql);
+		} else {
+			$result = $this->beans($sql);
+		}
 		return $result;
 	}
 
-	public function after_update() {
-		d(__METHOD__, func_get_args());
-	}
+	// public function after_update() {
+	// 	d(__METHOD__, func_get_args());
+	// }
 
 }
