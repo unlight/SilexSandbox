@@ -57,6 +57,20 @@
                     "classmap": ["sparrow.php"]
                 }
             }
+        }, {
+            "type": "package",
+            "package": {
+                "name": "grom358/php-annotation",
+                "version": "master",
+                "source": {
+                    "url": "https://github.com/grom358/php-annotation.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": ""
+                }
+            }
         }
     ]
 }

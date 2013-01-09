@@ -5,6 +5,13 @@ class EntryController extends Controller {
 
 	public function initialize() {
 		$this->addCssFile('style.css');
+		$this->addCssFile('entry.css');
+	}
+
+	public function register(Application $app) {
+		$this->addCssFile('icons.css');
+		$this->form = $app['form'];
+		return $this->render();
 	}
 
 	public function connectEndPoint() {

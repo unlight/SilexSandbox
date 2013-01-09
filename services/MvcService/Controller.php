@@ -20,6 +20,7 @@ abstract class Controller extends EventDispatcher {
 
 	public function __construct(Application $app) {
 		$this->app = $app;
+		$this->initialize();
 	}
 
 	public function initialize() {

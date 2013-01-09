@@ -1,0 +1,16 @@
+.ConnectButton [data-icon=facebook] {
+	color: #3D61B0;
+}
+
+.ConnectButton [data-icon=twitter] {
+	color: #00ACED;
+}
+
+.ConnectButton {
+	display: inline-block;
+	text-decoration: none !important;
+}
+
+.ConnectWithBox > div + div {
+	margin-top: 0.5em;
+}
