@@ -3,7 +3,7 @@
 use Silex\ServiceProviderInterface;
 use Silex\Application;
 
-class FormServiceProvider implements ServiceProviderInterface {
+class ValidationServiceProvider implements ServiceProviderInterface {
 
 	/**
 	 * Registers services on the given app.
@@ -14,11 +14,11 @@ class FormServiceProvider implements ServiceProviderInterface {
 	 * @param Application $app An Application instance
 	 */
 	public function register(Application $app) {
-		// Form.
-		$app['form'] = function() use ($app) {
-			$form = new Form($app['config'], $app['session.handler']);
-			$form->construct();
-			return $form;
+		// Validation.
+		$app['validation'] = function() use ($app) {
+			$validation = new Validation($app['config']);
+			$validation->construct();
+			return $validation;
 		};
 	}
 

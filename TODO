@@ -1,3 +1,2 @@
 model: simple model
 model: inject depency to model
-validation: move validation out from form

@@ -1,6 +1,5 @@
 <?php
 
-// class Model extends RedBean_SimpleModel {
 class Model extends RedBean_SimpleModel {
 
 	protected $name;
