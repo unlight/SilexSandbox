@@ -20,6 +20,7 @@ abstract class Controller extends EventDispatcher {
 
 	public function __construct(Application $app) {
 		$this->app = $app;
+		$this->initialize();
 	}
 
 	public function initialize() {
@@ -139,5 +140,9 @@ abstract class Controller extends EventDispatcher {
 	public function data($path, $default = '') {
 		$Result = GetValueR($path, $this->data, $default);
 		return $Result;
+	}
+
+	public function redirect($url, $code = 302) {
+		return $this->app->redirect($url, $code);
 	}
 }

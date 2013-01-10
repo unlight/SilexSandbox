@@ -17,13 +17,13 @@ $app->register(new FormServiceProvider());
 $app->register(new DatabaseServiceProvider());
 
 # Set error handler.
-if ($app['debug']) {
-	$handler = new php_error\ErrorHandler();
-	$handler->turnOn();
-	$app->error(function(\Exception $e, $code) use ($app, $handler) {
-		$handler->reportException($e);
-	});
-}
+// if ($app['debug']) {
+// 	$handler = new php_error\ErrorHandler();
+// 	$handler->turnOn();
+// 	$app->error(function(\Exception $e, $code) use ($app, $handler) {
+// 		$handler->reportException($e);
+// 	});
+// }
 
 // Run application.
 $app->run();

@@ -5,6 +5,13 @@ class EntryController extends Controller {
 
 	public function initialize() {
 		$this->addCssFile('style.css');
+		$this->addCssFile('entry.css');
+	}
+
+	public function register(Application $app) {
+		$this->addCssFile('icons.css');
+		$this->form = $app['form'];
+		return $this->render();
 	}
 
 	public function connectEndPoint() {
@@ -37,31 +44,16 @@ class EntryController extends Controller {
 				// so in this case you might use the 
 				// <a href="index.php?route=users/login">Sign-in</a> 
 				// to login using your email and password.</b>
-				$this->redirect('entry/login');
+				return $this->redirect('entry/login');
 			}
 		}
 		$newUser = R::dispense('user');
-		$newUser->import(array(
-			'provider_uid' => $profile->identifier,
-			'email' => $profile->email,
-			'password' => rand(),
-			'hash_method' => 'random'
-		));
+		$newUser->importValues($profile);
 		R::store($newUser);
-		d($newUser);
 
-		// 4.1 - create new user
-		$new_user_id = $user->create( $email, $password, $first_name, $last_name ); 
+		$sessionHandler->start($newUser->getId());
 
-		// 4.2 - creat a new authentication for him
-		$authentication->create( $new_user_id, $provider, $provider_uid, $email, $display_name, $first_name, $last_name, $profile_url, $website_url );
-
-		// 4.3 - store the new user_id in session
-		$_SESSION["user"] = $new_user_id;
-
-		// 4.4 - redirect to user/profile
-		$this->redirect( "users/profile" );
-
+		return $this->redirect("users/profile");
 	}
 
 	public function load1(Application $app) {

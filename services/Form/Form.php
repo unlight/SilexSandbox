@@ -143,7 +143,8 @@ class Form {
 	 * @return [type]           [description]
 	 */
 	protected function config($name, $default = false) {
-		return $this->configuration($name, $default);
+		$func = $this->configuration;
+		return $func($name, $default);
 	}
 
 	/**

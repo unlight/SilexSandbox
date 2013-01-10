@@ -3,6 +3,7 @@
 class Model extends RedBean_SimpleModel {
 
 	protected $name;
+	protected $columns;
 	protected $validation;
 
 	public function __construct($name) {
@@ -19,10 +20,29 @@ class Model extends RedBean_SimpleModel {
 		return $beans;
 	}
 
+	public function importValues($values) {
+		if (!is_array($values)) $values = (array) $values;
+		$this->defineColumns();
+		$values = array_intersect_key($values, $this->columns);
+		$this->bean->import($values);
+	}
+
+	public function defineColumns() {
+		if (is_null($this->columns)) {
+			$this->columns = R::getColumns($this->name);
+		}
+	}
+
 	public function update() {
-		$this->bean->date_updated = date('Y-m-d H:i:s');
+		if (array_key_exists('date_updated', $this->columns)) {
+			$this->bean->date_updated = date('Y-m-d H:i:s');
+		}
+		
 		if ($this->bean->getID() == 0) {
-			$this->bean->date_inserted = date('Y-m-d H:i:s');
+			if (array_key_exists('date_inserted', $this->columns)) {
+				$this->bean->date_inserted = date('Y-m-d H:i:s');
+			}
+			
 		}
 	}
 
@@ -68,9 +88,5 @@ class Model extends RedBean_SimpleModel {
 		}
 		return $result;
 	}
-
-	// public function after_update() {
-	// 	d(__METHOD__, func_get_args());
-	// }
 
 }
