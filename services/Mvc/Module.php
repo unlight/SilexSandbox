@@ -90,7 +90,7 @@ class Module {
 	/**
 	 * Returns the name of the asset where this component should be rendered.
 	 */
-	public function AssetTarget() {
+	public function assetTarget() {
 		trigger_error(ErrorMessage("Any class extended from the Module class must implement it's own AssetTarget method.", get_class($this), 'AssetTarget'), E_USER_ERROR);
 	}
 	
@@ -137,9 +137,6 @@ class Module {
 		if (substr($view, -6) == 'module')
 			$view = substr($view, 0, -6);
 					
-		if (substr($view, 0, 4) == 'gdn_')
-			$view = substr($view, 4);
-
 		if ($applicationFolder == '')
 			$applicationFolder = strpos($this->applicationFolder, '/') ? $this->applicationFolder : strtolower($this->applicationFolder);
 
