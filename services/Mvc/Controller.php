@@ -1,12 +1,10 @@
 <?php
 
 use Silex\Application;
-// use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-// abstract class Controller extends EventDispatcher implements ControllerProviderInterface {
 abstract class Controller extends EventDispatcher {
 	
 	protected $app;
@@ -48,8 +46,22 @@ abstract class Controller extends EventDispatcher {
 		return $this->app['request.info']['method'];	
 	}
 
-	public function addAsset($asset, $name = 'content') {
-		$this->assets[$name][] = $asset;
+	public function addAsset($asset, $container = 'content', $name = '') {
+		if ($name) {
+			$this->assets[$container][$name] = $asset;
+		} else {
+			$this->assets[$container][] = $asset;
+		}
+	}
+
+	public function addModule($module, $assetTarget = '') {
+		if (is_string($module)) {
+			if (class_exists($module)) {
+				$module = new $module($this);
+			}
+		}
+		$assetTarget = $assetTarget ?: $module->assetTarget();
+		$this->addAsset($module, $assetTarget, $module->name());
 	}
 
 	private function renderAsset($name) {
@@ -135,10 +147,10 @@ abstract class Controller extends EventDispatcher {
 	* @param string $path The path to the data.
 	* @param mixed $default The default value if the data array doesn't contain the path.
 	* @return mixed
-	* @see GetValueR()
+	* @see getValueR()
 	*/
 	public function data($path, $default = '') {
-		$Result = GetValueR($path, $this->data, $default);
+		$Result = getValueR($path, $this->data, $default);
 		return $Result;
 	}
 

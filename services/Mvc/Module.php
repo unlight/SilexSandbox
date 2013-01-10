@@ -1,24 +1,22 @@
 <?php
 
 /**
- * Modified by S.
- */
-
-/**
- * Module base class
+ * Module base class.
  *
  * Provides basic functionality when extended by real modules.
  * 
  * @author Mark O'Sullivan <markm@vanillaforums.com>
  * @author Todd Burry <todd@vanillaforums.com> 
+ * @author S <http://rv-home.ru>
  * @copyright 2003 Vanilla Forums, Inc
  * @license http://www.opensource.org/licenses/gpl-2.0.php GPL
  * @package Garden
  * @since 2.0
  */
 
-class Module {
-// class Gdn_Module extends Gdn_Pluggable implements Gdn_IModule {
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+class Module extends EventDispatcher {
 
 	/** The name of the current asset that is being rendered.
 	 *
@@ -46,7 +44,7 @@ class Module {
 	 * The object that constructed this object. Typically this should be a
 	 * Controller object.
 	 *
-	 * @var Gdn_Controller
+	 * @var object
 	 */
 	protected $sender;
 
@@ -58,7 +56,7 @@ class Module {
 	 */
 	protected $themeFolder;
 	
-	public $visible = TRUE;
+	public $visible = true;
 
 
 	/**
@@ -80,8 +78,9 @@ class Module {
 		// if ($applicationFolder !== false)
 		// 	$this->applicationFolder = $applicationFolder;
 		
-		if (is_object($sender))
+		if (is_object($sender)) {
 			$this->sender = $sender;
+		}
 			
 		// parent::__construct();
 	}
@@ -94,11 +93,12 @@ class Module {
 		trigger_error(ErrorMessage("Any class extended from the Module class must implement it's own AssetTarget method.", get_class($this), 'AssetTarget'), E_USER_ERROR);
 	}
 	
-	public function Data($name = null, $default = '') {
-		if ($name == null)
-			$result = $this->Data;
-		else
-			$result = GetValueR($name, $this->Data, $default);
+	public function data($name = null, $default = '') {
+		if ($name == null) {
+			$result = $this->data;
+		} else {
+			$result = getValueR($name, $this->data, $default);
+		}
 		return $result;
 	}
 
@@ -107,18 +107,18 @@ class Module {
 	 *
 	 * @return string
 	 */
-	public function FetchView() {
-		$viewPath = $this->FetchViewLocation();
+	public function fetchView() {
+		$viewPath = $this->fetchViewLocation();
 		$string = '';
 		ob_start();
-		if(is_object($this->sender) && isset($this->sender->Data)) {
-			$data = $this->sender->Data;
+		if (is_object($this->sender) && isset($this->sender->data)) {
+			$data = $this->sender->data;
 		} else {
 			$data = array();
 		}
 		include ($viewPath);
 		$string = ob_get_contents();
-		@ob_end_clean();
+		ob_end_clean();
 		return $string;
 	}
 
@@ -130,12 +130,9 @@ class Module {
 	 * @param string $applicationFolder
 	 * @return array
 	 */
-	public function FetchViewLocation($view = '', $applicationFolder = '') {
-		if ($view == '')
-			$view = strtolower($this->Name());
-			
-		if (substr($view, -6) == 'module')
-			$view = substr($view, 0, -6);
+	public function fetchViewLocation($view = '', $applicationFolder = '') {
+		if ($view == '') $view = strtolower($this->name());
+		if (substr($view, -6) == 'module') $view = substr($view, 0, -6);
 					
 		if ($applicationFolder == '')
 			$applicationFolder = strpos($this->applicationFolder, '/') ? $this->applicationFolder : strtolower($this->applicationFolder);
@@ -144,10 +141,10 @@ class Module {
 		
 		$viewPath = null;
 		
-		// Try to use Gdn_Controller's FetchViewLocation
+		// Try to use Gdn_Controller's fetchViewLocation
 		if (Gdn::Controller() instanceof Gdn_Controller) {
 			try {
-				$viewPath = Gdn::Controller()->FetchViewLocation($view, 'modules', $applicationFolder);
+				$viewPath = Gdn::Controller()->fetchViewLocation($view, 'modules', $applicationFolder);
 			} catch (Exception $ex) {}
 		}
 		
@@ -192,11 +189,11 @@ class Module {
 	 *
 	 * @return string
 	 */
-	public function Name() {
+	public function name() {
 		return get_class($this);
 	}
 
-	public function Path($newValue = false) {
+	public function path($newValue = false) {
 		static $path = false;
 		if ($newValue !== false)
 			$path = $newValue;
@@ -207,12 +204,12 @@ class Module {
 		return $path;
 	}
 	
-	public function Render() {
-		echo $this->ToString();
+	public function render() {
+		echo $this->toString();
 	}
 	
-	public function SetData($name, $value) {
-		$this->Data[$name] = $value;
+	public function setData($name, $value) {
+		$this->data[$name] = $value;
 	}
 
 	/**
@@ -222,9 +219,10 @@ class Module {
 	 *
 	 * @return string
 	 */
-	public function ToString() {
-		if ($this->Visible)
-			return $this->FetchView();
+	public function toString() {
+		if ($this->visible) {
+			return $this->fetchView();
+		}
 	}
 
 	/**
@@ -234,6 +232,6 @@ class Module {
 	 * @return string
 	 */
 	public function __toString() {
-		return $this->ToString();
+		return $this->toString();
 	}
 }

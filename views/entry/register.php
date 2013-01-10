@@ -3,7 +3,6 @@
 
 <div class="Row">
 
-	<div class="Column60">
 	<?php 
 	echo $form->open();
 	echo $form->errors();
@@ -34,9 +33,8 @@
 	echo $form->button('register', array('value' => 'Зарегистрироваться'));
 	echo $form->close();
 	?>
-	</div>
 
-	<div class="Column40">
+<!-- 	<div class="Column40">
 		<div class="Box ConnectWithBox">
 			<h4>Или вы можете …</h4>
 			<div class="ConnectBox">
@@ -53,6 +51,6 @@
 			</a>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 </div>
