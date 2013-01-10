@@ -19,6 +19,16 @@ class EntryController extends Controller {
 		Hybrid_Endpoint::process();
 	}
 
+	/**
+	 * @match /entry/{with}
+	 * @method GET
+	 * @assert('id', '\d+')
+	 * @requireHttps()
+	 * @convert('id', 'register')
+	 * @param  Application $app  [description]
+	 * @param  [type]      $with [description]
+	 * @return [type]            [description]
+	 */
 	public function connect(Application $app, $with) {
 		$sessionHandler = $app['session.handler'];
 		$keys = $app[$with];
@@ -87,10 +97,12 @@ class EntryController extends Controller {
 	}
 }
 
-$controller = new EntryController($app);
+if ($app) {
+	$controller = new EntryController($app);
 
-$app->match('entry/testregister', array($controller, 'testregister'));
-$app->match('entry/register', array($controller, 'register'));
-$app->match('entry/connect/{with}', array($controller, 'connect'));
-$app->match('entry/connect-end-point', array($controller, 'connectEndPoint'));
-$app->match('entry/load1', array($controller, 'load1'));
+	$app->match('entry/testregister', array($controller, 'testregister'));
+	$app->match('entry/register', array($controller, 'register'));
+	$app->match('entry/connect/{with}', array($controller, 'connect'));
+	$app->match('entry/connect-end-point', array($controller, 'connectEndPoint'));
+	$app->match('entry/load1', array($controller, 'load1'));
+}
