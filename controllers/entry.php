@@ -11,6 +11,7 @@ class EntryController extends Controller {
 	public function register(Application $app) {
 		$this->addCssFile('icons.css');
 		$this->form = $app['form'];
+		$this->addModule('GuestModule');
 		return $this->render();
 	}
 

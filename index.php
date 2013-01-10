@@ -9,7 +9,7 @@ if (file_exists('conf/bootstrap.before.php')) {
 }
 
 // Register services.
-$app->register(new ConfigurationServiceProvider('conf'));
+$app->register(new ConfigurationServiceProvider('settings'));
 $app->register(new MvcServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new \SessionHandlerServiceProvider());

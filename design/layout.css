@@ -3,9 +3,18 @@ body {
 }
 
 #Body {
-    margin: 0 auto;
-    max-width: 980px;
-    width: 90%;
+	margin: 0 auto;
+	max-width: 980px;
+	width: 90%;
+}
+
+#Body .ContentColumn {
+	margin: 0 230px 0 0;
+}
+
+#Panel {
+	width: 200px;
+	float: right;
 }
 
 h1 {
