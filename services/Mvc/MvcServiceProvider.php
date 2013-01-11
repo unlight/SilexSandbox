@@ -28,6 +28,7 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Application $app) {
 		$this->app = $app;
+		$app['event'] = new GenericEvent();
 		
 		loadFunctions('silex');
 		loadFunctions('request');
