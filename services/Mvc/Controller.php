@@ -4,8 +4,9 @@ use Silex\Application;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
-abstract class Controller extends EventDispatcher {
+abstract class Controller extends Pluggable {
 	
 	protected $app;
 	protected $assets = array();
@@ -17,6 +18,7 @@ abstract class Controller extends EventDispatcher {
 	public $head;
 
 	public function __construct(Application $app) {
+		parent::__construct();
 		$this->app = $app;
 		$this->initialize();
 	}
@@ -157,4 +159,5 @@ abstract class Controller extends EventDispatcher {
 	public function redirect($url, $code = 302) {
 		return $this->app->redirect($url, $code);
 	}
+
 }

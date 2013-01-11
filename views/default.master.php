@@ -4,7 +4,11 @@
 	<?php $this->renderAsset('head') ?>
 </head>
 <body id="<?php echo $app['body.identifier'] ?>" class="<?php echo $app['body.class'] ?>">
-	<?php $this->dispatch('before.body'); ?>
+	<?php 
+		// $app['event']->setArgument('class', 'Dummy');
+		$this->dispatch('before.body') ;
+		// echo $app['event']['class'];
+	?>
 	<div id="Frame">
 	<div class="Head" id="Head">
 		<div class="Row">
@@ -44,6 +48,11 @@
 	</div>
 
 </div>
-<?php $this->dispatch('after.body'); ?>
+<?php
+	// $Class = $app['body.class'];
+	// $this->EventArguments['Dummy'] =& $Class;
+	$this->fireEvent('after_body');
+	// echo $Class;
+?>
 </body>
 </html>

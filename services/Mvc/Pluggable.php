@@ -9,6 +9,7 @@
  * handled by plugins.
  *
  * @author Mark O'Sullivan <markm@vanillaforums.com>
+ * @author S <http://rv-home.ru>
  * @copyright 2003 Vanilla Forums, Inc
  * @license http://www.opensource.org/licenses/gpl-2.0.php GPL
  * @package Garden
@@ -67,7 +68,7 @@ abstract class Pluggable {
 	 *
 	 * @var enumerator
 	 */
-	public $HandlerType;
+	// public $HandlerType;
 
 
 	/**
@@ -88,7 +89,18 @@ abstract class Pluggable {
 		$this->ClassName = get_class($this);
 		$this->EventArguments = array();
 		$this->Returns = array();
-		$this->HandlerType = HANDLER_TYPE_NORMAL;
+		// $this->HandlerType = 'NORMAL'; // TODO: REMOVE
+	}
+
+	/**
+	 * [dispatch description]
+	 * @param  [type] $name [description]
+	 * @return [type]       [description]
+	 */
+	public function dispatch($name) {
+		$app = Application();
+		$event = $app['event'];
+		$app['dispatcher']->dispatch($name, $event);
 	}
 
 
@@ -130,15 +142,16 @@ abstract class Pluggable {
 	public function FireEvent($EventName, $Arguments = NULL) {
 		if (!$this->ClassName) {
 			$RealClassName = get_class($this);
-			throw new Exception("Event fired from pluggable class '{$RealClassName}', but Gdn_Pluggable::__construct() was never called.");
+			throw new Exception("Event fired from pluggable class '{$RealClassName}', but Pluggable::__construct() was never called.");
 		}
 		
 		$FireClass = !is_null($this->FireAs) ? $this->FireAs : $this->ClassName;
 		$this->FireAs = NULL;
 		
 		// Apply inline arguments to EventArguments
-		if (is_array($Arguments))
+		if (is_array($Arguments)) {
 			$this->EventArguments = array_merge($this->EventArguments, $Arguments);
+		}
 
 		// Look to the PluginManager to see if there are related event handlers and call them
 		return $this->CallEventHandlers($this, $FireClass, $EventName);
@@ -167,6 +180,7 @@ abstract class Pluggable {
 	 *
 	 */
 	public function __call($MethodName, $Arguments) {
+		throw new Exception("Looks like you call undefined method.");
 		// Define a return variable.
 		$Return = FALSE;
 
@@ -197,13 +211,14 @@ abstract class Pluggable {
 		// Call this object's method
 		if ($this->HasMethodOverride($this->ClassName, $ReferenceMethodName)) {
 			// The method has been overridden
-			$this->HandlerType = HANDLER_TYPE_OVERRIDE;
+			// $this->HandlerType = HANDLER_TYPE_OVERRIDE;
 			$Return = $this->CallMethodOverride($this, $this->ClassName, $ReferenceMethodName);
 		} else if ($this->HasNewMethod($this->ClassName, $ReferenceMethodName)) {
-			$this->HandlerType = HANDLER_TYPE_NEW;
+			// $this->HandlerType = HANDLER_TYPE_NEW;
 			$Return = $this->CallNewMethod($this, $this->ClassName, $ReferenceMethodName);
 		} else {
-			// The method has not been overridden
+			// The method has not been overridden.
+			// Schoolchild doesnt understand, why not call_user_func_array.
 			$Count = count($Arguments);
 			if ($Count == 0) {
 				$Return = $this->$ActualMethodName();
@@ -245,78 +260,136 @@ abstract class Pluggable {
 		$Return = FALSE;
 
 		// Look through $this->_EventHandlerCollection for relevant handlers
-		if ($this->CallEventHandler($Sender, $EventClassName, $EventName, $EventHandlerType))
+		if ($this->CallEventHandler($Sender, $EventClassName, $EventName, $EventHandlerType)) {
 			$Return = TRUE;
+		}
 
 		// Look for "Base" (aka any class that has $EventName)
-		if ($this->CallEventHandler($Sender, 'Base', $EventName, $EventHandlerType))
+		if ($this->CallEventHandler($Sender, 'Base', $EventName, $EventHandlerType)) {
 			$Return = TRUE;
+		}
 
 		// Look for Wildcard event handlers
 		$WildEventKey = $EventClassName.'_'.$EventName.'_'.$EventHandlerType;
-		if ($this->CallEventHandler($Sender, 'Base', 'All', $EventHandlerType, $WildEventKey))
+		if ($this->CallEventHandler($Sender, 'Base', 'All', $EventHandlerType, $WildEventKey)) {
 			$Return = TRUE;
-		if ($this->CallEventHandler($Sender, $EventClassName, 'All', $EventHandlerType, $WildEventKey))
+		}
+		if ($this->CallEventHandler($Sender, $EventClassName, 'All', $EventHandlerType, $WildEventKey)) {
 			$Return = TRUE;
+		}
 
 		return $Return;
 	}
 
+	private $_EventHandlerCollection;
+
 	protected function CallEventHandler($Sender, $EventClassName, $EventName, $EventHandlerType, $Options = array()) {
-		$this->Trace("CallEventHandler $EventClassName $EventName $EventHandlerType");
+
+		// First call. Register plugins.
+		if (is_null($this->_EventHandlerCollection)) {
+			$this->_EventHandlerCollection = array();
+			foreach (get_declared_classes() as $ClassName) {
+				// Only register the plugin if it implements the Gdn_IPlugin interface
+				if (!in_array('PluginInterface', class_implements($ClassName))) continue;
+				// Register this plugin's methods.
+				$ClassMethods = get_class_methods($ClassName);
+				foreach ($ClassMethods as $Method) {
+					if (!isset($Method[15])) continue;
+					$MethodName = strtolower($Method);
+					$Suffix = array_pop(explode('_', $MethodName));
+					switch ($Suffix) {
+						case 'handler':
+						case 'before':
+						case 'after': {
+							// $this->RegisterHandler($ClassName, $MethodName);
+							$HandlerKey = $ClassName.'.'.$MethodName;
+							$EventKey = $MethodName;
+							// Create a new array of handler class names if it doesn't exist yet.
+							if (array_key_exists($EventKey, $this->_EventHandlerCollection) === FALSE) {
+						 		$this->_EventHandlerCollection[$EventKey] = array();
+						 	}
+							// Specify this class as a handler for this method if it hasn't been done yet.
+							if (in_array($HandlerKey, $this->_EventHandlerCollection[$EventKey]) === FALSE) {
+						 		$this->_EventHandlerCollection[$EventKey][] = $HandlerKey;
+						 	}
+						} break;
+						case 'override':
+							$this->RegisterOverride($ClassName, $MethodName);
+							break;
+						case 'create':
+							$this->RegisterNewMethod($ClassName, $MethodName);
+							break;
+					}
+				}
+			}
+		}
+
+		// $this->Trace("CallEventHandler $EventClassName $EventName $EventHandlerType");
 		$Return = FALSE;
 
 		// Backwards compatible for event key.
 		if (is_string($Options)) {
-		$PassedEventKey = $Options;
-		$Options = array();
+			$PassedEventKey = $Options;
+			$Options = array();
 		} else {
-		$PassedEventKey = GetValue('EventKey', $Options, NULL);
+			$PassedEventKey = GetValue('EventKey', $Options, NULL);
 		}
 
 		$EventKey = strtolower($EventClassName.'_'.$EventName.'_'.$EventHandlerType);
-		if (!array_key_exists($EventKey, $this->_EventHandlerCollection))
-		return FALSE;
+		if (!array_key_exists($EventKey, $this->_EventHandlerCollection)) {
+			return FALSE;
+		}
 
-		if (is_null($PassedEventKey))
-		$PassedEventKey = $EventKey;
+		if (is_null($PassedEventKey)) $PassedEventKey = $EventKey;
 
 		// For "All" events, calculate the stack
 		if ($EventName == 'All') {
-		$Stack = debug_backtrace();
-		// this call
-		array_shift($Stack);
+			$Stack = debug_backtrace();
+			// this call
+			array_shift($Stack);
 
-		// plural call
-		array_shift($Stack);
+			// plural call
+			array_shift($Stack);
 
-		$EventCaller = array_shift($Stack);
-		$Sender->EventArguments['WildEventStack'] = $EventCaller;
+			$EventCaller = array_shift($Stack);
+			$Sender->EventArguments['wild_event_stack'] = $EventCaller;
 		}
 
-		$this->Trace($this->_EventHandlerCollection[$EventKey], 'Event Handlers');
+		// $this->Trace($this->_EventHandlerCollection[$EventKey], 'Event Handlers');
 
 		// Loop through the handlers and execute them
 		foreach ($this->_EventHandlerCollection[$EventKey] as $PluginKey) {
-		$PluginKeyParts = explode('.', $PluginKey);
-		if (count($PluginKeyParts) == 2) {
-		list($PluginClassName, $PluginEventHandlerName) = $PluginKeyParts;
+			$PluginKeyParts = explode('.', $PluginKey);
+			if (count($PluginKeyParts) == 2) {
+				list($PluginClassName, $PluginEventHandlerName) = $PluginKeyParts;
+			}
 
+			if (isset($Sender->Returns)) {
+				if (array_key_exists($EventKey, $Sender->Returns) === FALSE || is_array($Sender->Returns[$EventKey]) === FALSE) {
+					$Sender->Returns[$EventKey] = array();
+				}
+				$Return = $this->GetPluginInstance($PluginClassName)->$PluginEventHandlerName($Sender, $Sender->EventArguments, $PassedEventKey);
 
-		if (isset($Sender->Returns)) {
-		if (array_key_exists($EventKey, $Sender->Returns) === FALSE || is_array($Sender->Returns[$EventKey]) === FALSE)
-		$Sender->Returns[$EventKey] = array();
-
-		$Return = $this->GetPluginInstance($PluginClassName)->$PluginEventHandlerName($Sender, $Sender->EventArguments, $PassedEventKey);
-
-		$Sender->Returns[$EventKey][$PluginKey] = $Return;
-		$Return = TRUE;
-		} else {
-		$this->GetPluginInstance($PluginClassName)->$PluginEventHandlerName($Sender, array(), $PassedEventKey);
-		}
-		}
+				$Sender->Returns[$EventKey][$PluginKey] = $Return;
+				$Return = TRUE;
+			} else {
+				$this->GetPluginInstance($PluginClassName)->$PluginEventHandlerName($Sender, array(), $PassedEventKey);
+			}
 		}
 
 		return $Return;
 	}
+
+	private $Instannces;
+
+	private function GetPluginInstance($PluginClassName) {
+		$Instance =& $Instannces[$PluginClassName]; 
+		if (is_null($Instance)) {
+			$Instance = new $PluginClassName();
+		}
+		return $Instance;
+	}
+
+
+
 }

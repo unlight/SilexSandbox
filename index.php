@@ -10,12 +10,13 @@ if (file_exists('conf/bootstrap.before.php')) {
 }
 
 // Register services.
-$app->register(new ConfigurationServiceProvider('settings'));
+$app->register(new ConfigurationServiceProvider('conf'));
 $app->register(new MvcServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new \SessionHandlerServiceProvider());
+$app->register(new Unlight\SessionHandlerServiceProvider());
 $app->register(new FormServiceProvider());
 $app->register(new DatabaseServiceProvider());
+$app->register(new ExamplePluginServiceProvider());
 
 # Set error handler.
 // if ($app['debug']) {
