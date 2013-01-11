@@ -40,8 +40,25 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 * @return [type] [description]
 	 */
 	protected function registerMatchedController() {
+		// $this->registerControllers();
 		$this->registerControllersC();
+		// $this->registerControllersD();
 	}
+
+	// protected function registerControllersD() {
+	// 	$pathinfo = explode('/', StaticRequest('PathInfo'));
+	// 	$pathinfo = array_filter($pathinfo);
+	// 	$firstpart = array_shift($pathinfo);
+	// 	$controllerFile = $this->controllers . '/' . $firstpart . '.php';
+	// 	if (file_exists($controllerFile)) {
+	// 		require $controllerFile;
+	// 		$cacheFile = $this->app['path.cache'] . '/' . md5_file($controllerFile) . '.php';
+	// 		if (!file_exists($cacheFile)) {
+	// 			$class = ucfirst($firstpart) . 'Controller';
+	// 			$reflectionAnnotatedMethod = new ReflectionAnnotatedClass($class);
+	// 		}
+	// 	}
+	// }
 
 	/**
 	 * [registerControllersC description]
