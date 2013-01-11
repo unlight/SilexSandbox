@@ -2,4 +2,4 @@ function: to generate password
 figure out how to update structure (migrate)
 model: inject depency to model
 figure out: how to use event dispatcher
-think: how to register garden plugins (may be include file)
+think: how to register garden plugins (may be include file, garden plugin service)
