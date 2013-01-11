@@ -14,9 +14,7 @@
  * @since 2.0
  */
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-
-class Module extends EventDispatcher {
+class Module extends Pluggable {
 
 	/** The name of the current asset that is being rendered.
 	 *
