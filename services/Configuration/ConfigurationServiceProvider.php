@@ -15,6 +15,7 @@ class ConfigurationServiceProvider implements ServiceProviderInterface {
 	protected $path = 'conf';
 
 	public function __construct($path = null) {
+		loadFunctions('silex');
 		if ($path !== null) {
 			$this->path = $path;
 		}

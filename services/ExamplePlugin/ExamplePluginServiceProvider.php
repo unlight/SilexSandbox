@@ -1,12 +1,12 @@
 <?php
 
-namespace Unlight;
-
 use Silex\ServiceProviderInterface;
 use Silex\Application;
-use Unlight\SessionHandler;
 
-class SessionHandlerServiceProvider implements ServiceProviderInterface {
+
+require_once __DIR__ . '/ExamplePlugin.php';
+
+class ExamplePluginServiceProvider implements ServiceProviderInterface {
 
 	/**
 	 * Registers services on the given app.
@@ -17,11 +17,9 @@ class SessionHandlerServiceProvider implements ServiceProviderInterface {
 	 * @param Application $app An Application instance
 	 */
 	public function register(Application $app) {
-		if (!isset($app['session'])) {
-			$app->register(new Silex\Provider\SessionServiceProvider());
-		}
-		$app['session.handler'] = $app->share(function ($app) {
-			return new SessionHandler($app);
+		$dispatcher = $app['dispatcher'];
+		$dispatcher->addListener('before.body', function($event) {
+			// d($event);
 		});
 	}
 
@@ -33,5 +31,6 @@ class SessionHandlerServiceProvider implements ServiceProviderInterface {
 	 * a service must be requested).
 	 */
 	public function boot(Application $app) {
+
 	}
 }

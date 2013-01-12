@@ -4,6 +4,8 @@ use Silex\ServiceProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\GenericEvent;
+
 
 class MvcServiceProvider implements ServiceProviderInterface {
 
@@ -26,8 +28,12 @@ class MvcServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Application $app) {
 		$this->app = $app;
+		$app['event'] = new GenericEvent();
+		
+		loadFunctions('silex');
 		loadFunctions('request');
 		loadFunctions('string');
+
 		$this->registerRequestInfo();
 		$this->registerBodyIdentifier();
 		$this->registerBodyClass();
