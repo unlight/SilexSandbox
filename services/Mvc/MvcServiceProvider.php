@@ -38,33 +38,69 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		$this->registerBodyIdentifier();
 		$this->registerBodyClass();
 		$this->registerDefaultController();
-		$this->registerMatchedController();
+		$this->registerOtherControllers();
 	}
 
 	/**
-	 * [registerMatchedController description]
+	 * [registerOtherControllers description]
 	 * @return [type] [description]
 	 */
-	protected function registerMatchedController() {
+	protected function registerOtherControllers() {
+		// TODO: Keep one
 		// $this->registerControllers();
-		$this->registerControllersC();
-		// $this->registerControllersD();
+		// $this->registerControllersC();
+		// $this->registerControllersAnnotation();
+		$this->registerControllersRoute();
 	}
 
-	// protected function registerControllersD() {
-	// 	$pathinfo = explode('/', StaticRequest('PathInfo'));
-	// 	$pathinfo = array_filter($pathinfo);
-	// 	$firstpart = array_shift($pathinfo);
-	// 	$controllerFile = $this->controllers . '/' . $firstpart . '.php';
-	// 	if (file_exists($controllerFile)) {
-	// 		require $controllerFile;
-	// 		$cacheFile = $this->app['path.cache'] . '/' . md5_file($controllerFile) . '.php';
-	// 		if (!file_exists($cacheFile)) {
-	// 			$class = ucfirst($firstpart) . 'Controller';
-	// 			$reflectionAnnotatedMethod = new ReflectionAnnotatedClass($class);
-	// 		}
-	// 	}
-	// }
+	public function registerControllersRoute() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_filter($pathinfo);
+		$name = array_shift($pathinfo);
+		// $routeFile = $this->app['config']('routes')
+		$routeFile = 'settings/routes.php';
+		if (file_exists($routeFile)) {
+			$routes = require $routeFile;
+			$routes = getValue($name, $routes, array());
+			foreach ($routes as $match => $controller) {
+				$this->app->match($match, $controller);
+			}
+		}
+	}
+
+	/**
+	 * [registerControllersAnnotation description]
+	 * Annotations.
+	 * @return [type] [description]
+	 */
+	protected function registerControllersAnnotation() {
+		$pathinfo = explode('/', StaticRequest('PathInfo'));
+		$pathinfo = array_filter($pathinfo);
+		$file = array_shift($pathinfo);
+		$method = array_shift($pathinfo);
+		$controllerFile = $this->controllers . '/' . $file . '.php';
+		if (file_exists($controllerFile)) {
+			require $controllerFile;
+			$class = ucfirst($file) . 'Controller';
+			$cacheFile = 'cache/annotations/' . md5_file($controllerFile);
+			$controller = new $class($this->app);
+			if (!file_exists($cacheFile)) {
+				$reflectionAnnotatedMethod = new ReflectionAnnotatedMethod($class, $method);
+				$annotations = $reflectionAnnotatedMethod->getAnnotations();
+				$match = getValueR('match', $annotations, false, true);
+				$appController = $this->app->match($match->getAnnotation(), array($controller, $method));
+				foreach ($annotations as $annotation) {
+					$name = $annotation->getName();
+					if (method_exists($appController->getRoute(), $name)) {
+						$value = $annotation->value;
+						if (is_null($value)) $value = $annotation->getAnnotation();
+						if (!is_array($value)) $value = array($value);
+						call_user_func_array(array($appController, $name), $value);
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * [registerControllersC description]
@@ -77,7 +113,14 @@ class MvcServiceProvider implements ServiceProviderInterface {
 		if ($firstpart) {
 			$controllerFile = $this->controllers . '/' . $firstpart . '.php';
 			if (file_exists($controllerFile)) {
-				$app = $this->app;
+				$class = ucfirst($firstpart) . 'Controller';
+				$controller = new $class($this->app);
+				$controller->initialize();
+				if (isset($routes) && is_array($routes)) {
+					foreach ($routes as $match => $method) {
+						$this->app->match($match, array($controller, $method));
+					}
+				}
 				require $controllerFile;
 			}
 		}
