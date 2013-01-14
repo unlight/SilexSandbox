@@ -288,6 +288,7 @@ abstract class Pluggable {
 		// First call. Register plugins.
 		if (is_null($this->_EventHandlerCollection)) {
 			$this->_EventHandlerCollection = array();
+			// TODO; DO NOT DO get_declared_classes
 			foreach (get_declared_classes() as $ClassName) {
 				// Only register the plugin if it implements the Gdn_IPlugin interface
 				if (!in_array('PluginInterface', class_implements($ClassName))) continue;
@@ -296,7 +297,8 @@ abstract class Pluggable {
 				foreach ($ClassMethods as $Method) {
 					if (!isset($Method[15])) continue;
 					$MethodName = strtolower($Method);
-					$Suffix = array_pop(explode('_', $MethodName));
+					$Tmp = explode('_', $MethodName);
+					$Suffix = array_pop($Tmp);
 					switch ($Suffix) {
 						case 'handler':
 						case 'before':

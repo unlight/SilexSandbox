@@ -3,7 +3,6 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $app = new Silex\Application();
 $app['path.root'] = __DIR__;
-$app['path.cache'] = $app['path.root'] . '/cache';
 
 if (file_exists('conf/bootstrap.before.php')) {
 	require_once 'conf/bootstrap.before.php';

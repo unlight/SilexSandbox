@@ -3,4 +3,4 @@ figure out how to update structure (migrate)
 model: inject depency to model
 figure out: how to use event dispatcher
 think: how to register garden plugins (may be include file, garden plugin service)
-fork and rewrite php-annotation
+plugin system: do not do get_declared_classes

@@ -1,6 +1,15 @@
 <?php
 use Silex\Application;
 
+// $routes = array(
+// 	'entry/connect/{with}' => 'connect',
+// 	'entry/testregister' => 'testregister',
+// 	'entry/register' => 'register',
+// 	'entry/connect/{with}' => 'connect',
+// 	'entry/connect-end-point' => 'connectEndPoint',
+// 	'entry/load1' => 'load1'
+// );
+
 class EntryController extends Controller {
 
 	public function initialize() {
@@ -8,6 +17,14 @@ class EntryController extends Controller {
 		$this->addCssFile('entry.css');
 	}
 
+	/**
+	 * [register description]
+	 * @param  Application $app [description]
+	 * @return [type]           [description]
+	 * @match /entry/register
+	 * @assert('id', '\d+')
+	 * @method GET
+	 */
 	public function register(Application $app) {
 		$this->addCssFile('icons.css');
 		$this->form = $app['form'];
@@ -95,14 +112,4 @@ class EntryController extends Controller {
 		// d(1, $app['request']->getBasePath(), GetWebRoot());
 		return $this->render();
 	}
-}
-
-if ($app) {
-	$controller = new EntryController($app);
-
-	$app->match('entry/testregister', array($controller, 'testregister'));
-	$app->match('entry/register', array($controller, 'register'));
-	$app->match('entry/connect/{with}', array($controller, 'connect'));
-	$app->match('entry/connect-end-point', array($controller, 'connectEndPoint'));
-	$app->match('entry/load1', array($controller, 'load1'));
 }

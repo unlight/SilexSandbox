@@ -17,9 +17,9 @@ abstract class Controller extends Pluggable {
 	protected $jsFiles = array();
 	public $head;
 
-	public function __construct(Application $app) {
+	public function __construct() {
 		parent::__construct();
-		$this->app = $app;
+		$this->app = Application();
 		$this->initialize();
 	}
 
