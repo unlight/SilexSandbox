@@ -15,7 +15,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Unlight\SessionHandlerServiceProvider());
 $app->register(new FormServiceProvider());
 $app->register(new DatabaseServiceProvider());
-$app->register(new ExamplePluginServiceProvider());
+//PluginManager::StaticDeclarePlugin('ExamplePlugin');
 
 # Set error handler.
 // if ($app['debug']) {

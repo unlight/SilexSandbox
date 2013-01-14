@@ -118,7 +118,7 @@ abstract class Pluggable {
 		}
 
 		// Look to the PluginManager to see if there are related event handlers and call them.
-		return PluginManager::CallEventHandlers($this, $FireClass, $EventName);
+		return PluginManager::StaticCallEventHandlers($this, $FireClass, $EventName);
 	}
 
 	/**
@@ -200,7 +200,7 @@ abstract class Pluggable {
 		}
 
 		// Call the "After" event handlers
-		PluginManager::CallEventHandlers($this, $this->ClassName, $ReferenceMethodName, 'After');
+		PluginManager::StaticCallEventHandlers($this, $this->ClassName, $ReferenceMethodName, 'After');
 
 		return $Return;
 	}

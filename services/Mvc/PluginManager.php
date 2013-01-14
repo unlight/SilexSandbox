@@ -8,18 +8,26 @@ class PluginManager extends Pluggable {
 	protected $RegisteredPlugins = array();
 	protected static $SelfInstance;
 
-	public static function __callStatic($Name, $Arguments) {
+	public static function Instance() {
 		if (is_null(self::$SelfInstance)) {
 			self::$SelfInstance = new self();
 		}
+		return self::$SelfInstance;
+	}
+
+	public static function __callStatic($Name, $Arguments) {
+		$Instance = self::Instance();
+		if (substr($Name, 0, 6) == "Static") {
+			$Name = substr($Name, 6);
+		}
 		// Schoolchild does not understand why not call_user_func_array() :)
 		switch (count($Arguments)) {
-			case 0: return self::$SelfInstance->$Name();
-			case 1: return self::$SelfInstance->$Name($Arguments[0]);
-			case 2: return self::$SelfInstance->$Name($Arguments[0], $Arguments[1]);
-			case 3: return self::$SelfInstance->$Name($Arguments[0], $Arguments[1], $Arguments[2]);
-			case 4: return self::$SelfInstance->$Name($Arguments[0], $Arguments[1], $Arguments[2], $Arguments[3]);
-			case 5: return self::$SelfInstance->$Name($Arguments[0], $Arguments[1], $Arguments[2], $Arguments[3], $Arguments[4]);
+			case 0: return $Instance->$Name();
+			case 1: return $Instance->$Name($Arguments[0]);
+			case 2: return $Instance->$Name($Arguments[0], $Arguments[1]);
+			case 3: return $Instance->$Name($Arguments[0], $Arguments[1], $Arguments[2]);
+			case 4: return $Instance->$Name($Arguments[0], $Arguments[1], $Arguments[2], $Arguments[3]);
+			case 5: return $Instance->$Name($Arguments[0], $Arguments[1], $Arguments[2], $Arguments[3], $Arguments[4]);
 			default: throw new Exception('', 1);
 		}
 	}
@@ -55,6 +63,10 @@ class PluginManager extends Pluggable {
 			}
 		}
 		$this->RegisteredPlugins[$ClassName] = TRUE;
+	}
+
+	public function DeclarePlugin($ClassName) {
+		$this->DeclaredPlugins[] = $ClassName;
 	}
 
 	protected function RegisterPlugins() {

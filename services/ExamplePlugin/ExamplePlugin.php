@@ -2,8 +2,8 @@
 
 class ExamplePlugin extends Plugin {
 
-	public function entrycontroller_after_body_handler($sender) {
-		$class =& $sender->EventArguments['BodyClass'];
-		$class .= ' New';
+	public function EntryController_After_Body_Handler($Sender) {
+		$Class =& $Sender->EventArguments['BodyClass'];
+		$Class .= ' New';
 	}
 }
