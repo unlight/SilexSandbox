@@ -21,8 +21,8 @@ fieldset select {
 }
 
 fieldset input[type="radio"] {
-	margin-right: 0.5em;
-	vertical-align: -10%;
+	margin-right: 5px;
+	vertical-align: -1px;
 }
 
 fieldset.RadioList ul {
@@ -47,8 +47,8 @@ fieldset.RadioList ul li label {
 }
 
 fieldset input[type="checkbox"] {
-	vertical-align: -10%;
-	margin-right: 0.5em;
+	vertical-align: -1px;
+	margin-right: 5px;
 }
 
 fieldset.CheckBox {
@@ -214,5 +214,5 @@ fieldset label.Required:after {
 	color: red;
 	content: " *";
 	display: inline;
-	margin: 0 0.2em;
+	margin: 0;
 }
