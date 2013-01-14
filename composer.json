@@ -1,5 +1,5 @@
 {
-	"version": "1.0.5",
+	"version": "1.0.6",
     "require": {
         "silex/silex": "1.0.*",
         "JosephLenton/PHP-Error": "*",
